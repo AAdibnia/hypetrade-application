@@ -8,7 +8,6 @@ HypeTrad helps retail traders cut through market hype by documenting the why beh
 - [Repository Structure](#repository-structure)
 - [Why This Is a Strong PM Showcase](#why-this-is-a-strong-pm-showcase)
 - [MVP Highlights](#mvp-highlights)
-- [Screenshots](#screenshots)
 - [Quickstart](#quickstart)
 - [Docs](#docs)
 - [Roadmap (Next)](#roadmap-next)
@@ -35,12 +34,6 @@ HypeTrad helps retail traders cut through market hype by documenting the why beh
 - Trade History with empty state; theme‑consistent UI
 - Live search via RapidAPI with offline fallback + throttling (MVP)
 - Reset button to return account to initial state for demos
-
-## Screenshots
-- Auth (Login/Sign Up)
-- Dashboard + New Trade (Buy) → Journal
-- Sell → Journal
-- History (empty + populated)
 
 ## Quickstart
 ```bash
