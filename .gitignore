@@ -3,3 +3,4 @@
 **/dist
 MVP/.env
 .DS_Store
+Prototype/node_modules/
