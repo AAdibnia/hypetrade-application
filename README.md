@@ -1,8 +1,8 @@
-# HypeTrad — Product Manager Showcase
+# HypeTrade — Product Manager Showcase
 
-[![CI](https://github.com/AAdibnia/hypetrad-mvp/actions/workflows/ci.yml/badge.svg)](https://github.com/AAdibnia/hypetrad-mvp/actions/workflows/ci.yml)
+[![CI](https://github.com/AAdibnia/hypetrade-mvp/actions/workflows/ci.yml/badge.svg)](https://github.com/AAdibnia/hypetrade-mvp/actions/workflows/ci.yml)
 
-HypeTrad helps retail traders cut through market hype by documenting the why behind trades, analyzing patterns, and building disciplined strategies.
+HypeTrade helps retail traders cut through market hype by documenting the why behind trades, analyzing patterns, and building disciplined strategies.
 
 ## Table of Contents
 - [Repository Structure](#repository-structure)
@@ -48,7 +48,7 @@ REACT_APP_RAPIDAPI_KEY=YOUR_KEY
 Then restart `npm start`.
 
 ## Docs
-- [Roadmap](Road-Maps/HypeTrade_ Product Roadmap.pdf)
+- [Roadmap](Road-Maps/HypeTrade_%20Product%20Roadmap.pdf)
 - [Epics & User Stories](Road-Maps/Epics-User_stories-Acceptance_criteria.pdf)
 - [Prototype](Prototype/README.md)
 - [MVP Technical Details](MVP/README.md)

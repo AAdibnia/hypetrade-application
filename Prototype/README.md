@@ -3,8 +3,7 @@
 This folder contains the design‑aligned UI prototype. The flows and components were first designed in Figma, then translated into React + Tailwind markup for visual reference. These files are not wired to live data.
 
 ## Quickstart
-[This is a link to the prototpe.
-](https://slaw-raster-12547559.figma.site/)
+[This is a link to the prototype.](https://slaw-raster-12547559.figma.site/)
 
 ## What this is
 - Figma‑driven UI translated into React components
