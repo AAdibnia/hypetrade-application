@@ -37,7 +37,6 @@ HypeTrad helps retail traders cut through market hype by documenting the why beh
 - Reset button to return account to initial state for demos
 
 ## Screenshots
-> Add a few screenshots/GIFs to make the story visual.
 - Auth (Login/Sign Up)
 - Dashboard + New Trade (Buy) → Journal
 - Sell → Journal
