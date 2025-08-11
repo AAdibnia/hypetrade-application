@@ -33,6 +33,8 @@ interface Position {
   quantity: number;
   purchasePrice: number;
   purchaseDate: string;
+  // V1: link sell rows to their originating buy lot
+  parentPositionId?: string;
 }
 
 export default function App() {
@@ -250,13 +252,14 @@ export default function App() {
     const updatedUser = { ...user, cashBalance: user.cashBalance + proceeds };
     setUser(updatedUser);
 
-    // append sell position
+    // append sell position (link to originating buy)
     const sellPosition: Position = {
       id: Date.now().toString(),
       ticker: position.ticker,
       quantity: -quantity,
       purchasePrice: position.purchasePrice,
-      purchaseDate: new Date().toISOString()
+      purchaseDate: new Date().toISOString(),
+      parentPositionId: position.id
     };
     const updatedPositions = [...positions, sellPosition];
     setPositions(updatedPositions);

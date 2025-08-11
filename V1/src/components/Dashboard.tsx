@@ -29,6 +29,8 @@ interface Position {
   quantity: number;
   purchasePrice: number;
   purchaseDate: string;
+  // V1: link sell rows to their originating buy lot
+  parentPositionId?: string;
 }
 
 interface Trade {
@@ -192,7 +194,7 @@ export function Dashboard({ user, onLogout, positions, setPositions, trades, set
     
     // Count how many shares from this specific position have been sold
     const soldFromThisPosition = positions
-      .filter(p => p.ticker === position.ticker && p.quantity < 0 && p.purchasePrice === position.purchasePrice)
+      .filter(p => p.ticker === position.ticker && p.quantity < 0 && (p.parentPositionId === position.id || p.purchasePrice === position.purchasePrice))
       .reduce((sum, p) => sum + Math.abs(p.quantity), 0);
     
     return Math.max(0, position.quantity - soldFromThisPosition);
@@ -315,7 +317,7 @@ export function Dashboard({ user, onLogout, positions, setPositions, trades, set
         </Card>
       </div>
 
-      {/* Positions Table */}
+      {/* Positions Table (V1: group sells under their buy lot, newest-first) */}
       <Card className="bg-white border border-gray-200">
         <CardHeader className="pb-2">
           <CardTitle className="text-blue-900 text-sm font-normal">Your Positions</CardTitle>
@@ -327,76 +329,112 @@ export function Dashboard({ user, onLogout, positions, setPositions, trades, set
                   </div>
                 ) : (
                   <div className="space-y-4 sm:space-y-0">
-                    {/* Mobile Card Layout */}
+                    {/* Mobile Card Layout (grouped) */}
                     <div className="sm:hidden space-y-3">
-                      {positions.map((position) => {
-                        const stock = mockStocks[position.ticker];
-                        const currentPrice = stock?.currentPrice || 0;
-                        const pnl = calculatePositionPnL(position);
-                        const isSell = isSellPosition(position);
-                        
-                        return (
-                          <div key={position.id} className="bg-gray-50 rounded-lg p-4">
-                            <div className="flex justify-between items-start mb-3">
-                              <div>
-                                <div className="flex items-center space-x-2">
-                                  <h3 className="text-blue-900">{position.ticker}</h3>
-                                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                    isSell ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
-                                  }`}>
-                                    {getPositionType(position)}
-                                  </span>
+                      {(() => {
+                        const buys = positions.filter(p => p.quantity > 0);
+                        const sells = positions.filter(p => p.quantity < 0);
+                        const sellsByParent = new Map<string, Position[]>();
+                        sells.forEach(s => {
+                          let parentId = s.parentPositionId;
+                          if (!parentId) {
+                            const candidate = buys.find(b => b.ticker === s.ticker && b.purchasePrice === s.purchasePrice);
+                            if (candidate) parentId = candidate.id;
+                          }
+                          if (!parentId) return;
+                          const arr = sellsByParent.get(parentId) || [];
+                          arr.push(s);
+                          sellsByParent.set(parentId, arr);
+                        });
+                        return buys.map(buy => {
+                          const stock = mockStocks[buy.ticker];
+                          const currentPrice = stock?.currentPrice || 0;
+                          const pnl = calculatePositionPnL(buy);
+                          const children = (sellsByParent.get(buy.id) || []).sort((a, b) => new Date(b.purchaseDate).getTime() - new Date(a.purchaseDate).getTime());
+                          const remaining = getAvailableSharesForPosition(buy);
+                          return (
+                            <div key={buy.id} className="bg-gray-50 rounded-lg p-4">
+                              <div className="flex justify-between items-start mb-3">
+                                <div>
+                                  <div className="flex items-center space-x-2">
+                                    <h3 className="text-blue-900">{buy.ticker}</h3>
+                                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Buy</span>
+                                  </div>
+                                  <p className="text-sm text-gray-600">{stock?.companyName || 'Unknown'}</p>
+                                  <p className="text-xs text-gray-500 mt-1">Remaining shares: {remaining}</p>
                                 </div>
-                                <p className="text-sm text-gray-600">{stock?.companyName || 'Unknown'}</p>
+                                <div className="text-right">
+                                  <p className={`${pnl >= 0 ? 'text-green-600' : 'text-red-600'}`}>{formatCurrency(pnl)}</p>
+                                </div>
                               </div>
-                              <div className="text-right">
-                                <p className={`${pnl >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                                  {formatCurrency(pnl)}
-                                </p>
+                              <div className="grid grid-cols-2 gap-4 text-sm mb-3">
+                                <div>
+                                  <span className="text-gray-600">Purchase:</span>
+                                  <span className="ml-1">{formatCurrency(buy.purchasePrice)}</span>
+                                </div>
+                                <div>
+                                  <span className="text-gray-600">Current:</span>
+                                  <span className="ml-1">{formatCurrency(currentPrice)}</span>
+                                </div>
                               </div>
-                            </div>
-                            <div className="grid grid-cols-2 gap-4 text-sm mb-3">
-                              <div>
-                                <span className="text-gray-600">{isSell ? 'Sell Price:' : 'Purchase:'}</span>
-                                <span className="ml-1">{formatCurrency(position.purchasePrice)}</span>
-                              </div>
-                              <div>
-                                <span className="text-gray-600">Current:</span>
-                                <span className="ml-1">{formatCurrency(currentPrice)}</span>
-                              </div>
-                            </div>
-                            <div className="flex space-x-2">
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => handleJournalClick(position)}
-                                className="flex-1"
-                              >
-                                <BookOpen className="h-4 w-4 mr-2" />
-                                Journal
-                              </Button>
-                              {!isSellPosition(position) && (
+                              <div className="flex space-x-2">
+                                <Button size="sm" variant="outline" onClick={() => handleJournalClick(buy)} className="flex-1">
+                                  <BookOpen className="h-4 w-4 mr-2" />
+                                  Journal
+                                </Button>
                                 <Button
                                   size="sm"
                                   variant="outline"
-                                  onClick={() => handleSellClick(position)}
-                                  disabled={getAvailableSharesForPosition(position) <= 0}
-                                  className={`flex-1 ${
-                                    getAvailableSharesForPosition(position) > 0 
-                                      ? 'bg-red-600 hover:bg-red-700 text-white border-red-600' 
-                                      : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
-                                  }`}
+                                  onClick={() => handleSellClick(buy)}
+                                  disabled={getAvailableSharesForPosition(buy) <= 0}
+                                  className={`flex-1 ${getAvailableSharesForPosition(buy) > 0 ? 'bg-red-600 hover:bg-red-700 text-white border-red-600' : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'}`}
                                 >
                                   Sell
                                 </Button>
+                              </div>
+
+                              {children.length > 0 && (
+                                <div className="mt-3 space-y-2">
+                                  {children.map(child => {
+                                    const childStock = mockStocks[child.ticker];
+                                    const childCurrent = childStock?.currentPrice || 0;
+                                    const childPnl = calculatePositionPnL(child);
+                                    return (
+                                      <div key={child.id} className="ml-4 p-3 rounded-md border border-gray-200 bg-white">
+                                        <div className="flex justify-between items-center">
+                                          <div className="flex items-center space-x-2">
+                                            <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">Sell</span>
+                                            <span className="text-xs text-gray-500">{new Date(child.purchaseDate).toLocaleString()}</span>
+                                          </div>
+                                          <div className={`${childPnl >= 0 ? 'text-green-600' : 'text-red-600'} text-sm`}>{formatCurrency(childPnl)}</div>
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-4 text-xs mt-2">
+                                          <div>
+                                            <span className="text-gray-600">Sell Price:</span>
+                                            <span className="ml-1">{formatCurrency(child.purchasePrice)}</span>
+                                          </div>
+                                          <div>
+                                            <span className="text-gray-600">Current:</span>
+                                            <span className="ml-1">{formatCurrency(childCurrent)}</span>
+                                          </div>
+                                        </div>
+                                        <div className="mt-2">
+                                          <Button size="sm" variant="outline" onClick={() => handleJournalClick(child)} className="border-gray-200">
+                                            <BookOpen className="h-4 w-4 mr-2" /> Journal
+                                          </Button>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
                               )}
                             </div>
-                          </div>
-                        );
-                      })}
+                          );
+                        });
+                      })()}
                     </div>
 
-                    {/* Desktop Table Layout */}
+                    {/* Desktop Table Layout (grouped) */}
                     <div className="hidden sm:block overflow-x-auto">
                       <table className="w-full">
                         <thead>
@@ -412,67 +450,92 @@ export function Dashboard({ user, onLogout, positions, setPositions, trades, set
                           </tr>
                         </thead>
                         <tbody>
-                          {positions.map((position) => {
-                            const stock = mockStocks[position.ticker];
-                            const currentPrice = stock?.currentPrice || 0;
-                            const pnl = calculatePositionPnL(position);
-                            const isSell = isSellPosition(position);
-                            
-                            return (
-                              <tr key={position.id} className="border-b border-gray-100 hover:bg-gray-50">
-                                <td className="py-3 px-4">
-                                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                    isSell ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
-                                  }`}>
-                                    {getPositionType(position)}
-                                  </span>
-                                </td>
-                                <td className="py-3 px-4">
-                                  <span className="text-blue-900">{position.ticker}</span>
-                                </td>
-                                <td className="py-3 px-4 text-gray-600">
-                                  {stock?.companyName || 'Unknown'}
-                                </td>
-                                <td className="py-3 px-4 text-left">
-                                  {formatCurrency(position.purchasePrice)}
-                                </td>
-                                <td className="py-3 px-4 text-left">
-                                  {formatCurrency(currentPrice)}
-                                </td>
-                                <td className={`py-3 px-4 text-left ${pnl >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                                  {formatCurrency(pnl)}
-                                </td>
-                                <td className="py-3 px-4 text-left">
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => handleJournalClick(position)}
-                                    className="border-gray-200"
-                                  >
-                                    <BookOpen className="h-4 w-4 mr-1" />
-                                    Journal
-                                  </Button>
-                                </td>
-                                <td className="py-3 px-4 text-left">
-                                  {!isSellPosition(position) && (
+                          {(() => {
+                            const buys = positions.filter(p => p.quantity > 0);
+                            const sells = positions.filter(p => p.quantity < 0);
+                            const sellsByParent = new Map<string, Position[]>();
+                            sells.forEach(s => {
+                              let parentId = s.parentPositionId;
+                              if (!parentId) {
+                                const candidate = buys.find(b => b.ticker === s.ticker && b.purchasePrice === s.purchasePrice);
+                                if (candidate) parentId = candidate.id;
+                              }
+                              if (!parentId) return;
+                              const arr = sellsByParent.get(parentId) || [];
+                              arr.push(s);
+                              sellsByParent.set(parentId, arr);
+                            });
+                            const rows: JSX.Element[] = [];
+                            buys.forEach(buy => {
+                              const stock = mockStocks[buy.ticker];
+                              const currentPrice = stock?.currentPrice || 0;
+                              const pnl = calculatePositionPnL(buy);
+                              const remaining = getAvailableSharesForPosition(buy);
+                              rows.push(
+                                <tr key={buy.id} className="border-b border-gray-100 hover:bg-gray-50">
+                                  <td className="py-3 px-4">
+                                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Buy</span>
+                                  </td>
+                                  <td className="py-3 px-4">
+                                    <div className="flex items-center space-x-2">
+                                      <span className="text-blue-900">{buy.ticker}</span>
+                                      <span className="text-xs text-gray-500">Remaining: {remaining}</span>
+                                    </div>
+                                  </td>
+                                  <td className="py-3 px-4 text-gray-600">{stock?.companyName || 'Unknown'}</td>
+                                  <td className="py-3 px-4 text-left">{formatCurrency(buy.purchasePrice)}</td>
+                                  <td className="py-3 px-4 text-left">{formatCurrency(currentPrice)}</td>
+                                  <td className={`py-3 px-4 text-left ${pnl >= 0 ? 'text-green-600' : 'text-red-600'}`}>{formatCurrency(pnl)}</td>
+                                  <td className="py-3 px-4 text-left">
+                                    <Button size="sm" variant="outline" onClick={() => handleJournalClick(buy)} className="border-gray-200">
+                                      <BookOpen className="h-4 w-4 mr-1" /> Journal
+                                    </Button>
+                                  </td>
+                                  <td className="py-3 px-4 text-left">
                                     <Button
                                       size="sm"
                                       variant="outline"
-                                      onClick={() => handleSellClick(position)}
-                                      disabled={getAvailableSharesForPosition(position) <= 0}
-                                      className={`${
-                                        getAvailableSharesForPosition(position) > 0 
-                                          ? 'bg-red-600 hover:bg-red-700 text-white border-red-600' 
-                                          : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
-                                      }`}
+                                      onClick={() => handleSellClick(buy)}
+                                      disabled={getAvailableSharesForPosition(buy) <= 0}
+                                      className={`${getAvailableSharesForPosition(buy) > 0 ? 'bg-red-600 hover:bg-red-700 text-white border-red-600' : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'}`}
                                     >
                                       Sell
                                     </Button>
-                                  )}
-                                </td>
-                              </tr>
-                            );
-                          })}
+                                  </td>
+                                </tr>
+                              );
+                              const children = (sellsByParent.get(buy.id) || []).sort((a, b) => new Date(b.purchaseDate).getTime() - new Date(a.purchaseDate).getTime());
+                              children.forEach(child => {
+                                const stockC = mockStocks[child.ticker];
+                                const currentC = stockC?.currentPrice || 0;
+                                const pnlC = calculatePositionPnL(child);
+                                rows.push(
+                                  <tr key={child.id} className="border-b border-gray-100 bg-gray-50">
+                                    <td className="py-3 px-4">
+                                      <span className="px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">Sell</span>
+                                    </td>
+                                    <td className="py-3 px-4">
+                                      <div className="pl-4">
+                                        <span className="text-blue-900">{child.ticker}</span>
+                                        <span className="ml-2 text-xs text-gray-500">{new Date(child.purchaseDate).toLocaleString()}</span>
+                                      </div>
+                                    </td>
+                                    <td className="py-3 px-4 text-gray-600">{stockC?.companyName || 'Unknown'}</td>
+                                    <td className="py-3 px-4 text-left">{formatCurrency(child.purchasePrice)}</td>
+                                    <td className="py-3 px-4 text-left">{formatCurrency(currentC)}</td>
+                                    <td className={`py-3 px-4 text-left ${pnlC >= 0 ? 'text-green-600' : 'text-red-600'}`}>{formatCurrency(pnlC)}</td>
+                                    <td className="py-3 px-4 text-left">
+                                      <Button size="sm" variant="outline" onClick={() => handleJournalClick(child)} className="border-gray-200">
+                                        <BookOpen className="h-4 w-4 mr-1" /> Journal
+                                      </Button>
+                                    </td>
+                                    <td className="py-3 px-4 text-left"></td>
+                                  </tr>
+                                );
+                              });
+                            });
+                            return rows;
+                          })()}
                         </tbody>
                       </table>
                     </div>

@@ -120,6 +120,7 @@ V1/
 
 - UI workflow is the same; code now calls a stable API layer instead of touching storage directly
 - Easier future migration to a real backend without UI rewrites
+- Positions view (V1-only): Sell rows are grouped under their originating buy lot, newest-first, with a Remaining shares indicator on the buy row (applies to mobile and desktop)
 
 ## Product Framing (PM Showcase)
 
