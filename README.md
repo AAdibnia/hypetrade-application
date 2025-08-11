@@ -2,7 +2,18 @@
 
 [![CI](https://github.com/AAdibnia/hypetrad-mvp/actions/workflows/ci.yml/badge.svg)](https://github.com/AAdibnia/hypetrad-mvp/actions/workflows/ci.yml)
 
-HypeTrad helps retail traders cut through market hype by documenting the why behind decisions, analyzing patterns, and building disciplined strategies.
+HypeTrad helps retail traders cut through market hype by documenting the why behind trades, analyzing patterns, and building disciplined strategies.
+
+## Table of Contents
+- [Repository Structure](#repository-structure)
+- [Why This Is a Strong PM Showcase](#why-this-is-a-strong-pm-showcase)
+- [MVP Highlights](#mvp-highlights)
+- [Screenshots](#screenshots)
+- [Quickstart](#quickstart)
+- [Docs](#docs)
+- [Roadmap (Next)](#roadmap-next)
+- [Architecture in Brief](#architecture-in-brief)
+- [License](#license)
 
 ## Repository Structure
 - `MVP/` — Web MVP (React + TypeScript + Tailwind)
@@ -10,22 +21,29 @@ HypeTrad helps retail traders cut through market hype by documenting the why beh
 - `Road-Maps/` — Goals, epics, roadmaps, and boards
 - `docs/` — PM docs (Decisions, Roadmap, Metrics)
 
-## Why this is a strong PM showcase
+## Why This Is a Strong PM Showcase
 - Clear MVP scope focused on journaling discipline and repeatable decisions
 - Thoughtful trade-offs (local‑only MVP, per‑purchase rows, journals per trade)
-- Documented roadmap and success metrics
-- Clean UX flows (buy → journal, sell → journal, history)
+- Documented roadmap and success metrics with acceptance criteria
+- Clean end‑to‑end flows (buy → journal, sell → journal, history) and reset for demos
 
 ## MVP Highlights
 - Authentication (mock, device‑local persistence)
-- Dashboard: cash, portfolio value, P&L, allocation donut
+- Dashboard: Cash, Portfolio Value, P&L, Allocation Donut
 - Positions per purchase; sells add negative rows; original buy remains
-- Buy (New Trade modal) and Sell (modal), both followed by Journal
+- Buy (New Trade modal) and Sell (modal) both followed by Journal entry
 - Trade History with empty state; theme‑consistent UI
 - Live search via RapidAPI with offline fallback + throttling (MVP)
 - Reset button to return account to initial state for demos
 
-## Quickstart (Local)
+## Screenshots
+> Add a few screenshots/GIFs to make the story visual.
+- Auth (Login/Sign Up)
+- Dashboard + New Trade (Buy) → Journal
+- Sell → Journal
+- History (empty + populated)
+
+## Quickstart
 ```bash
 cd MVP
 npm install
@@ -42,14 +60,20 @@ Then restart `npm start`.
 - Decisions: `docs/Decisions.md`
 - Roadmap: `docs/Roadmap.md`
 - Metrics: `docs/Metrics.md`
-- MVP Technical README: `MVP/README.md`
+- MVP technical details: `MVP/README.md`
 
-## Next Steps
+## Roadmap (Next)
 - History filters/search + row detail modal (journal)
 - Secure proxy for quotes + stronger throttling/caching
 - Notes/Journal page; templates/tags; search & browse
 - Mobile & accessibility polish (focus traps, Esc, ARIA)
 - Optional backend for auth & analytics
+
+## Architecture in Brief
+- Client‑only MVP (React + TypeScript + Tailwind)
+- `App.tsx` owns global state (user, positions, trades, stocks); components are presentational
+- Persistence per email in localStorage; immediate writes on buy/sell/journal/reset
+- Prices update every minute (random walk); fallback to last trade price or purchase price
 
 ## License
 MIT (or your choice)
