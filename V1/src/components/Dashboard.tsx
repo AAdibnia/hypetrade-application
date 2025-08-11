@@ -44,6 +44,8 @@ interface Trade {
   journalEntry?: {
     sources: string[];
     rationale: string;
+    tags?: string[];
+    sentiment?: 'bullish' | 'neutral' | 'bearish';
   };
 }
 
@@ -76,29 +78,7 @@ export function Dashboard({ user, onLogout, positions, setPositions, trades, set
   const [selectedTradeForHistory, setSelectedTradeForHistory] = useState<Trade | null>(null);
 
   // Local persistence helpers (mirrors App.tsx) per email account
-  const STORAGE_KEY = 'hypetrad_users_v1';
-  const loadUsersMap = (): Record<string, any> => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? (JSON.parse(raw) as Record<string, any>) : {};
-    } catch {
-      return {} as Record<string, any>;
-    }
-  };
-  const saveUsersMap = (map: Record<string, any>) => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(map));
-  };
-  const persistCurrentUser = (data: { cashBalance: number; positions: Position[]; trades: Trade[] }) => {
-    if (!user?.email) return;
-    const map = loadUsersMap();
-    map[user.email] = {
-      password: map[user.email]?.password ?? '',
-      cashBalance: data.cashBalance,
-      positions: data.positions,
-      trades: data.trades,
-    };
-    saveUsersMap(map);
-  };
+  // V1: persistence handled in App
 
 
   // Simulate real-time price updates
@@ -184,9 +164,7 @@ export function Dashboard({ user, onLogout, positions, setPositions, trades, set
     return position.quantity < 0;
   };
 
-  const getPositionType = (position: Position) => {
-    return isSellPosition(position) ? 'Sell' : 'Buy';
-  };
+  // removed unused helper to satisfy linter
 
   const getAvailableSharesForPosition = (position: Position) => {
     // For each individual position, check if it has any shares left to sell
@@ -655,6 +633,28 @@ export function Dashboard({ user, onLogout, positions, setPositions, trades, set
                         <p className="text-gray-800 text-sm">{selectedTradeForHistory.journalEntry.rationale}</p>
                       </div>
                     </div>
+                    {(selectedTradeForHistory.journalEntry.tags?.length || 0) > 0 && (
+                      <div>
+                        <label className="block text-sm text-gray-600 mb-2">Tags</label>
+                        <div className="flex flex-wrap gap-2">
+                          {selectedTradeForHistory.journalEntry.tags!.map(tag => (
+                            <span key={tag} className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs">{tag}</span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {selectedTradeForHistory.journalEntry.sentiment && (
+                      <div>
+                        <label className="block text-sm text-gray-600 mb-2">Sentiment</label>
+                        <span className={`px-2 py-1 rounded-full text-xs ${
+                          selectedTradeForHistory.journalEntry.sentiment === 'bullish' ? 'bg-green-100 text-green-800' :
+                          selectedTradeForHistory.journalEntry.sentiment === 'bearish' ? 'bg-red-100 text-red-800' :
+                          'bg-gray-100 text-gray-800'
+                        }`}>
+                          {selectedTradeForHistory.journalEntry.sentiment}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

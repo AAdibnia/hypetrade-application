@@ -16,7 +16,12 @@ interface JournalModalProps {
   isOpen: boolean;
   onClose: () => void;
   trade: Trade | null;
-  onSave: (sources: string[], rationale: string) => void;
+  onSave: (
+    sources: string[],
+    rationale: string,
+    tags?: string[],
+    sentiment?: 'bullish' | 'neutral' | 'bearish'
+  ) => void;
 }
 
 const informationSources = [
@@ -30,6 +35,8 @@ const informationSources = [
 export function JournalModal({ isOpen, onClose, trade, onSave }: JournalModalProps) {
   const [selectedSources, setSelectedSources] = useState<string[]>([]);
   const [rationale, setRationale] = useState('');
+  const [tagsInput, setTagsInput] = useState('');
+  const [sentiment, setSentiment] = useState<'bullish' | 'neutral' | 'bearish' | undefined>(undefined);
 
   if (!isOpen || !trade) return null;
 
@@ -42,10 +49,16 @@ export function JournalModal({ isOpen, onClose, trade, onSave }: JournalModalPro
   };
 
   const handleSave = () => {
-    onSave(selectedSources, rationale);
+    const tags = tagsInput
+      .split(',')
+      .map(t => t.trim())
+      .filter(Boolean);
+    onSave(selectedSources, rationale, tags, sentiment);
     // Reset form
     setSelectedSources([]);
     setRationale('');
+    setTagsInput('');
+    setSentiment(undefined);
   };
 
   const formatCurrency = (amount: number) => {
@@ -136,6 +149,50 @@ export function JournalModal({ isOpen, onClose, trade, onSave }: JournalModalPro
               rows={4}
               className="w-full p-3 border border-gray-200 rounded-md resize-none text-sm text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
+          </div>
+
+          {/* Tags */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-600">Tags (comma-separated)</label>
+            <input
+              type="text"
+              placeholder="e.g., earnings, momentum, swing"
+              value={tagsInput}
+              onChange={(e) => setTagsInput(e.target.value)}
+              className="w-full p-2 h-8 border border-gray-200 rounded-md text-sm text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            {tagsInput.trim() && (
+              <div className="flex flex-wrap gap-2 pt-1">
+                {tagsInput
+                  .split(',')
+                  .map(t => t.trim())
+                  .filter(Boolean)
+                  .map(tag => (
+                    <span key={tag} className="px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full text-xs">{tag}</span>
+                  ))}
+              </div>
+            )}
+          </div>
+
+          {/* Sentiment */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-600">Sentiment</label>
+            <div className="flex gap-2">
+              {([
+                { key: 'bullish', label: 'Bullish', className: 'bg-green-600 hover:bg-green-700' },
+                { key: 'neutral', label: 'Neutral', className: 'bg-gray-600 hover:bg-gray-700' },
+                { key: 'bearish', label: 'Bearish', className: 'bg-red-600 hover:bg-red-700' },
+              ] as const).map(opt => (
+                <button
+                  key={opt.key}
+                  type="button"
+                  onClick={() => setSentiment(opt.key)}
+                  className={`px-3 h-8 rounded-md text-white text-xs ${opt.className} ${sentiment === opt.key ? 'ring-2 ring-offset-1 ring-blue-300' : ''}`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Action Buttons */}
