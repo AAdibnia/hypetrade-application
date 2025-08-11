@@ -49,6 +49,7 @@ REACT_APP_RAPIDAPI_KEY=YOUR_KEY
 Then restart `npm start`.
 
 ## Docs
+- [MVP](MVP/README.md)
 - [Prototype](Prototype/README.md)
 - [MVP Technical Details](MVP/README.md)
 - [HypeTrade — GTM Strategy & Metrics](HypeTrade-%20GTM%20Strategy%20%26%20Metrics.pdf)
