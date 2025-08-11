@@ -3,12 +3,13 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 
 interface LoginFormProps {
-  onLogin: (email: string, password: string) => void;
+  onLogin: (email: string, password: string, remember: boolean) => void;
 }
 
 export function LoginForm({ onLogin }: LoginFormProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [remember, setRemember] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
 
   const validateForm = () => {
@@ -33,7 +34,7 @@ export function LoginForm({ onLogin }: LoginFormProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      onLogin(email, password);
+      onLogin(email, password, remember);
     }
   };
 
@@ -75,6 +76,19 @@ export function LoginForm({ onLogin }: LoginFormProps) {
         {errors.password && (
           <p className="text-red-500 text-sm mt-1">{errors.password}</p>
         )}
+      </div>
+
+      <div className="flex items-center justify-between">
+        <label className="inline-flex items-center space-x-2 text-sm text-gray-700">
+          <input
+            type="checkbox"
+            checked={remember}
+            onChange={(e) => setRemember(e.target.checked)}
+            className="h-3 w-3 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+          />
+          <span>Remember me</span>
+        </label>
+        <span className="text-xs text-gray-500">Private device only</span>
       </div>
 
       <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white h-8">

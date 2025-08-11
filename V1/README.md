@@ -121,12 +121,7 @@ V1/
 - UI workflow is the same; code now calls a stable API layer instead of touching storage directly
 - Easier future migration to a real backend without UI rewrites
 - Positions view (V1-only): Sell rows are grouped under their originating buy lot, newest-first, with a Remaining shares indicator on the buy row (applies to mobile and desktop)
-- Journal (V1-only): Sentiment field added to journal entries; displayed in Trade Details
-
-## What's new in V1 UI
-
-- Grouped sells under their buy lot (newest-first) with Remaining shares on the buy row
-- Journal enhancements: select sentiment (bullish/neutral/bearish); visible in Trade Details
+- Login (V1-only): "Remember me" option persists your session on this device
 
 ## Product Framing (PM Showcase)
 

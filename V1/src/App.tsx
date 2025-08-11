@@ -24,8 +24,6 @@ interface Trade {
   journalEntry?: {
     sources: string[];
     rationale: string;
-    // V1 additions
-    sentiment?: 'bullish' | 'neutral' | 'bearish';
   };
 }
 
@@ -87,6 +85,7 @@ export default function App() {
 
   // Local persistence helpers (per email account)
   const STORAGE_KEY = 'hypetrad_users_v1';
+  const SESSION_EMAIL_KEY = 'hypetrad_session_email_v1';
   const loadUsersMap = () => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -97,6 +96,22 @@ export default function App() {
   };
   const saveUsersMap = (map: Record<string, any>) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(map));
+  };
+  const getSessionEmail = (): string | null => {
+    return sessionStorage.getItem(SESSION_EMAIL_KEY) || localStorage.getItem(SESSION_EMAIL_KEY);
+  };
+  const setSessionEmail = (email: string, remember: boolean) => {
+    if (remember) {
+      localStorage.setItem(SESSION_EMAIL_KEY, email);
+      sessionStorage.removeItem(SESSION_EMAIL_KEY);
+    } else {
+      sessionStorage.setItem(SESSION_EMAIL_KEY, email);
+      localStorage.removeItem(SESSION_EMAIL_KEY);
+    }
+  };
+  const clearSessionEmail = () => {
+    sessionStorage.removeItem(SESSION_EMAIL_KEY);
+    localStorage.removeItem(SESSION_EMAIL_KEY);
   };
   const saveCurrentUserData = (email: string, data: { password?: string; cashBalance: number; positions: Position[]; trades: Trade[]; }) => {
     const map = loadUsersMap();
@@ -109,11 +124,12 @@ export default function App() {
     saveUsersMap(map);
   };
 
-  const handleLogin = (email: string, password: string) => {
+  const handleLogin = (email: string, password: string, remember: boolean = false) => {
     if (!email || password.length < 8) return;
     const map = loadUsersMap();
     const record = map[email];
     if (record && record.password === password) {
+      setSessionEmail(email, remember);
       setUser({ id: '1', email, cashBalance: record.cashBalance ?? 100000 });
       setPositions(Array.isArray(record.positions) ? record.positions : []);
       setTrades(Array.isArray(record.trades) ? record.trades : []);
@@ -138,6 +154,7 @@ export default function App() {
   };
 
   const handleLogout = () => {
+    clearSessionEmail();
     setUser(null);
     setCurrentView('login');
   };
@@ -196,16 +213,12 @@ export default function App() {
     setIsJournalModalOpen(true);
   };
 
-  const handleSaveJournalEntry = (
-    sources: string[],
-    rationale: string,
-    sentiment: 'bullish' | 'neutral' | 'bearish' | undefined = undefined
-  ) => {
+  const handleSaveJournalEntry = (sources: string[], rationale: string) => {
     if (!pendingTrade) return;
 
     // If pendingTrade has an id, update existing trade (used for sells)
     if (pendingTrade.id) {
-      const updated = trades.map(t => t.id === pendingTrade.id ? { ...t, journalEntry: { sources, rationale, sentiment } } : t);
+      const updated = trades.map(t => t.id === pendingTrade.id ? { ...t, journalEntry: { sources, rationale } } : t);
       setTrades(updated);
       if (user) {
         saveCurrentUserData(user.email, {
@@ -228,7 +241,7 @@ export default function App() {
       price: pendingTrade.price,
       date: new Date().toISOString(),
       positionId: pendingTrade.positionId,
-      journalEntry: { sources, rationale, sentiment }
+      journalEntry: { sources, rationale }
     };
 
     const updated = [newTrade, ...trades];
@@ -296,6 +309,18 @@ export default function App() {
   };
 
   // Authentication pages
+  // Auto-restore session (Remember me)
+  useEffect(() => {
+    const email = getSessionEmail();
+    if (!email) return;
+    const map = loadUsersMap();
+    const record = map[email];
+    if (!record) return;
+    setUser({ id: '1', email, cashBalance: record.cashBalance ?? 100000 });
+    setPositions(Array.isArray(record.positions) ? record.positions : []);
+    setTrades(Array.isArray(record.trades) ? record.trades : []);
+    setCurrentView('dashboard');
+  }, []);
   if (!user) {
     return (
       <div className="min-h-screen bg-blue-50 flex items-center justify-center p-4">
@@ -433,7 +458,7 @@ export default function App() {
             const trade = args[0] as { ticker: string; quantity: number; price: number };
             handleExecuteTrade(trade);
           } else {
-            const [ticker, , quantity] = args as [string, 'buy' | 'sell', number];
+            const [ticker, _action, quantity] = args as [string, 'buy' | 'sell', number];
             const price = (stocks as any)[ticker]?.currentPrice || 0;
             handleExecuteTrade({ ticker, quantity, price });
           }
