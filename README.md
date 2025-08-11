@@ -53,6 +53,9 @@ Then restart `npm start`.
 - Roadmap: `docs/Roadmap.md`
 - Metrics: `docs/Metrics.md`
 - MVP technical details: `MVP/README.md`
+- Research & GTM PDFs:
+  - [HypeTrade — GTM Strategy & Metrics](HypeTrade-%20GTM%20Strategy%20%26%20Metrics.pdf)
+  - [HypeTrade — User Research & Competitive Analysis](HypeTrade-User-Research-and-Competitive-Analysis.pdf)
 
 ## Roadmap (Next)
 - History filters/search + row detail modal (journal)
