@@ -369,8 +369,8 @@ export function Dashboard({ user, onLogout, positions, setPositions, trades, set
                                   size="sm"
                                   variant="outline"
                                   onClick={() => handleSellClick(buy)}
-                                  disabled={getAvailableSharesForPosition(buy) <= 0}
-                                  className={`flex-1 ${getAvailableSharesForPosition(buy) > 0 ? 'bg-red-600 hover:bg-red-700 text-white border-red-600' : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'}`}
+                                  disabled={buy.quantity <= 0}
+                                  className={`flex-1 ${getAvailableSharesForPosition(buy) > 0 ? 'bg-red-600 hover:bg-red-700 text-white border-red-600' : 'bg-gray-100 text-gray-400 border-gray-200'}`}
                                 >
                                   Sell
                                 </Button>
@@ -479,8 +479,8 @@ export function Dashboard({ user, onLogout, positions, setPositions, trades, set
                                       size="sm"
                                       variant="outline"
                                       onClick={() => handleSellClick(buy)}
-                                      disabled={getAvailableSharesForPosition(buy) <= 0}
-                                      className={`${getAvailableSharesForPosition(buy) > 0 ? 'bg-red-600 hover:bg-red-700 text-white border-red-600' : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'}`}
+                                      disabled={buy.quantity <= 0}
+                                      className={`${getAvailableSharesForPosition(buy) > 0 ? 'bg-red-600 hover:bg-red-700 text-white border-red-600' : 'bg-gray-100 text-gray-400 border-gray-200'}`}
                                     >
                                       Sell
                                     </Button>
