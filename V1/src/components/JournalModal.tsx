@@ -19,7 +19,6 @@ interface JournalModalProps {
   onSave: (
     sources: string[],
     rationale: string,
-    tags?: string[],
     sentiment?: 'bullish' | 'neutral' | 'bearish'
   ) => void;
 }
@@ -35,7 +34,6 @@ const informationSources = [
 export function JournalModal({ isOpen, onClose, trade, onSave }: JournalModalProps) {
   const [selectedSources, setSelectedSources] = useState<string[]>([]);
   const [rationale, setRationale] = useState('');
-  const [tagsInput, setTagsInput] = useState('');
   const [sentiment, setSentiment] = useState<'bullish' | 'neutral' | 'bearish' | undefined>(undefined);
 
   if (!isOpen || !trade) return null;
@@ -49,15 +47,10 @@ export function JournalModal({ isOpen, onClose, trade, onSave }: JournalModalPro
   };
 
   const handleSave = () => {
-    const tags = tagsInput
-      .split(',')
-      .map(t => t.trim())
-      .filter(Boolean);
-    onSave(selectedSources, rationale, tags, sentiment);
+    onSave(selectedSources, rationale, sentiment);
     // Reset form
     setSelectedSources([]);
     setRationale('');
-    setTagsInput('');
     setSentiment(undefined);
   };
 
@@ -151,28 +144,7 @@ export function JournalModal({ isOpen, onClose, trade, onSave }: JournalModalPro
             />
           </div>
 
-          {/* Tags */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-600">Tags (comma-separated)</label>
-            <input
-              type="text"
-              placeholder="e.g., earnings, momentum, swing"
-              value={tagsInput}
-              onChange={(e) => setTagsInput(e.target.value)}
-              className="w-full p-2 h-8 border border-gray-200 rounded-md text-sm text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-            {tagsInput.trim() && (
-              <div className="flex flex-wrap gap-2 pt-1">
-                {tagsInput
-                  .split(',')
-                  .map(t => t.trim())
-                  .filter(Boolean)
-                  .map(tag => (
-                    <span key={tag} className="px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full text-xs">{tag}</span>
-                  ))}
-              </div>
-            )}
-          </div>
+          {/* Tags removed per request */}
 
           {/* Sentiment */}
           <div className="space-y-2">

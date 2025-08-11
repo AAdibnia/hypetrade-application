@@ -25,7 +25,6 @@ interface Trade {
     sources: string[];
     rationale: string;
     // V1 additions
-    tags?: string[];
     sentiment?: 'bullish' | 'neutral' | 'bearish';
   };
 }
@@ -200,14 +199,13 @@ export default function App() {
   const handleSaveJournalEntry = (
     sources: string[],
     rationale: string,
-    tags: string[] = [],
     sentiment: 'bullish' | 'neutral' | 'bearish' | undefined = undefined
   ) => {
     if (!pendingTrade) return;
 
     // If pendingTrade has an id, update existing trade (used for sells)
     if (pendingTrade.id) {
-      const updated = trades.map(t => t.id === pendingTrade.id ? { ...t, journalEntry: { sources, rationale, tags, sentiment } } : t);
+      const updated = trades.map(t => t.id === pendingTrade.id ? { ...t, journalEntry: { sources, rationale, sentiment } } : t);
       setTrades(updated);
       if (user) {
         saveCurrentUserData(user.email, {
@@ -230,7 +228,7 @@ export default function App() {
       price: pendingTrade.price,
       date: new Date().toISOString(),
       positionId: pendingTrade.positionId,
-      journalEntry: { sources, rationale, tags, sentiment }
+      journalEntry: { sources, rationale, sentiment }
     };
 
     const updated = [newTrade, ...trades];

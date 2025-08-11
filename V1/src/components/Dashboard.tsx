@@ -170,10 +170,15 @@ export function Dashboard({ user, onLogout, positions, setPositions, trades, set
     // For each individual position, check if it has any shares left to sell
     if (position.quantity <= 0) return 0; // Already a sell position or no shares
     
-    // Count how many shares from this specific position have been sold
-    const soldFromThisPosition = positions
-      .filter(p => p.ticker === position.ticker && p.quantity < 0 && (p.parentPositionId === position.id || p.purchasePrice === position.purchasePrice))
-      .reduce((sum, p) => sum + Math.abs(p.quantity), 0);
+    // Count how many shares from this specific position have been sold (V1: use explicit parent link; fallback only if no links exist)
+    const sellsLinked = positions.filter(p => p.quantity < 0 && p.parentPositionId === position.id);
+    let soldFromThisPosition = sellsLinked.reduce((sum, p) => sum + Math.abs(p.quantity), 0);
+    if (soldFromThisPosition === 0) {
+      // Fallback for legacy rows without parentPositionId
+      soldFromThisPosition = positions
+        .filter(p => p.ticker === position.ticker && p.quantity < 0 && p.purchasePrice === position.purchasePrice)
+        .reduce((sum, p) => sum + Math.abs(p.quantity), 0);
+    }
     
     return Math.max(0, position.quantity - soldFromThisPosition);
   };
@@ -633,16 +638,7 @@ export function Dashboard({ user, onLogout, positions, setPositions, trades, set
                         <p className="text-gray-800 text-sm">{selectedTradeForHistory.journalEntry.rationale}</p>
                       </div>
                     </div>
-                    {(selectedTradeForHistory.journalEntry.tags?.length || 0) > 0 && (
-                      <div>
-                        <label className="block text-sm text-gray-600 mb-2">Tags</label>
-                        <div className="flex flex-wrap gap-2">
-                          {selectedTradeForHistory.journalEntry.tags!.map(tag => (
-                            <span key={tag} className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs">{tag}</span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
+                    {/* Tags removed per request */}
                     {selectedTradeForHistory.journalEntry.sentiment && (
                       <div>
                         <label className="block text-sm text-gray-600 mb-2">Sentiment</label>
