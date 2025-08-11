@@ -16,6 +16,7 @@ HypeTrade helps retail traders cut through market hype by documenting the why be
 
 ## Repository Structure
 - `MVP/` — Web MVP (React + TypeScript + Tailwind)
+- `V1/` — API-ready client (same UI as MVP with an API layer and adapters)
 - `Prototype/` — Early prototype UI and styles
 - `Road-Maps/` — Goals, epics, roadmaps, and boards
 
@@ -52,6 +53,7 @@ Then restart `npm start`.
 - [Epics & User Stories](Road-Maps/Epics-User_stories-Acceptance_criteria.pdf)
 - [Prototype](Prototype/README.md)
 - [MVP Technical Details](MVP/README.md)
+- [V1 (API-ready client)](V1/README.md)
 - [HypeTrade — GTM Strategy & Metrics](HypeTrade-%20GTM%20Strategy%20%26%20Metrics.pdf)
 - [HypeTrade — User Research & Competitive Analysis](HypeTrade-User-Research-and-Competitive-Analysis.pdf)
 
