@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HypeTrade - MVP Sprint Board</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f5f7;
+        }
+        .kanban-board {
+            display: grid;
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+            gap: 1.5rem;
+        }
+        @media (min-width: 1024px) {
+            .kanban-board {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+        }
+        .kanban-column {
+            background-color: #ebecf0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+        .column-title {
+            font-weight: 600;
+            color: #172b4d;
+            padding: 0 0.5rem 1rem 0.5rem;
+        }
+        .story-card {
+            background-color: #ffffff;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            cursor: grab;
+            border-left-width: 4px;
+        }
+        .epic-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.125rem 0.5rem;
+            border-radius: 9999px;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+        .epic-auth {
+            border-color: #4b6bfb;
+            color: #4b6bfb;
+            background-color: #eef2ff;
+        }
+        .epic-trading {
+            border-color: #34d399;
+            color: #059669;
+            background-color: #d1fae5;
+        }
+        .epic-journal {
+            border-color: #f59e0b;
+            color: #b45309;
+            background-color: #fef3c7;
+        }
+        .story-card .id {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+        .story-card .title {
+            font-weight: 600;
+            color: #111827;
+        }
+        .ac-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #4b5563;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6 lg:p-8">
+
+    <div class="max-w-screen-2xl mx-auto">
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">HypeTrade: Phase 1 (MVP) Backlog</h1>
+            <p class="mt-1 text-lg text-gray-600">A sprint-ready backlog for building the core product in the first month.</p>
+        </header>
+
+        <div class="kanban-board">
+            <!-- Backlog Column -->
+            <div class="kanban-column">
+                <h2 class="column-title">Backlog (Prioritized)</h2>
+                <div class="story-card border-l-green-500">
+                    <span class="epic-label epic-trading">EPIC: Core Trading</span>
+                    <p class="id">HT-9</p>
+                    <p class="title">As a user, I want my portfolio dashboard to show my total portfolio value and my overall unrealized profit or loss so I can track my performance.</p>
+                     <div class="mt-3 pt-2 border-t">
+                        <h4 class="ac-title">Acceptance Criteria</h4>
+                        <ul class="list-disc list-inside text-sm text-gray-600 mt-1 space-y-1">
+                            <li>Total value is sum of cash and all holdings' current value.</li>
+                            <li>P/L is calculated correctly and color-coded (green/red).</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="story-card border-l-green-500">
+                    <span class="epic-label epic-trading">EPIC: Core Trading</span>
+                    <p class="id">HT-15</p>
+                    <p class="title">As a user, I want to see the current price and profit/loss for each individual purchase.</p>
+                     <div class="mt-3 pt-2 border-t">
+                        <h4 class="ac-title">Acceptance Criteria</h4>
+                        <ul class="list-disc list-inside text-sm text-gray-600 mt-1 space-y-1">
+                            <li>Holdings table has columns for Purchase Price, Current Price, and P/L.</li>
+                            <li>P/L is calculated as (Current Price - Purchase Price) * Quantity.</li>
+                            <li>P/L is color-coded (green for profit, red for loss).</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="story-card border-l-amber-500">
+                    <span class="epic-label epic-journal">EPIC: Journaling</span>
+                    <p class="id">HT-11</p>
+                    <p class="title">As a user, I want to select from a list of information sources.</p>
+                     <div class="mt-3 pt-2 border-t">
+                        <h4 class="ac-title">Acceptance Criteria</h4>
+                        <ul class="list-disc list-inside text-sm text-gray-600 mt-1 space-y-1">
+                            <li>Checkboxes for TA, FA, News, Social Media, Gut Feeling are present.</li>
+                            <li>User can select multiple sources.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="story-card border-l-amber-500">
+                    <span class="epic-label epic-journal">EPIC: Journaling</span>
+                    <p class="id">HT-12</p>
+                    <p class="title">As a user, I want a text box to write my trade rationale.</p>
+                     <div class="mt-3 pt-2 border-t">
+                        <h4 class="ac-title">Acceptance Criteria</h4>
+                        <ul class="list-disc list-inside text-sm text-gray-600 mt-1 space-y-1">
+                            <li>Text area accepts multi-line input.</li>
+                            <li>Input is saved with the trade record.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="story-card border-l-amber-500">
+                    <span class="epic-label epic-journal">EPIC: Journaling</span>
+                    <p class="id">HT-13</p>
+                    <p class="title">As a user, I want to view a simple, chronological list of all my past trades.</p>
+                     <div class="mt-3 pt-2 border-t">
+                        <h4 class="ac-title">Acceptance Criteria</h4>
+                        <ul class="list-disc list-inside text-sm text-gray-600 mt-1 space-y-1">
+                            <li>List is separate from the main dashboard.</li>
+                            <li>Shows Ticker, Action, Quantity, and Date for each trade.</li>
+                        </ul>
+                    </div>
+                </div>
+                 <div class="story-card border-l-amber-500">
+                    <span class="epic-label epic-journal">EPIC: Journaling</span>
+                    <p class="id">HT-14</p>
+                    <p class="title">As a user, I want to click on a past trade to view its journal entry.</p>
+                     <div class="mt-3 pt-2 border-t">
+                        <h4 class="ac-title">Acceptance Criteria</h4>
+                        <ul class="list-disc list-inside text-sm text-gray-600 mt-1 space-y-1">
+                            <li>Clicking a trade in the history list opens its details.</li>
+                            <li>Details view shows the saved sources and rationale.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- This Week Column -->
+            <div class="kanban-column">
+                <h2 class="column-title">To Do (This Sprint)</h2>
+                <div class="story-card border-l-green-500">
+                    <span class="epic-label epic-trading">EPIC: Core Trading</span>
+                    <p class="id">HT-6</p>
+                    <p class="title">As a user, I want to execute a "buy" order for a stock.</p>
+                     <div class="mt-3 pt-2 border-t">
+                        <h4 class="ac-title">Acceptance Criteria</h4>
+                        <ul class="list-disc list-inside text-sm text-gray-600 mt-1 space-y-1">
+                            <li>Trade fails if cash is insufficient.</li>
+                            <li>Portfolio holdings are updated correctly.</li>
+                            <li>Cash balance is reduced by the correct amount.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="story-card border-l-green-500">
+                    <span class="epic-label epic-trading">EPIC: Core Trading</span>
+                    <p class="id">HT-7</p>
+                    <p class="title">As a user, I want to execute a "sell" order for a stock I own.</p>
+                     <div class="mt-3 pt-2 border-t">
+                        <h4 class="ac-title">Acceptance Criteria</h4>
+                        <ul class="list-disc list-inside text-sm text-gray-600 mt-1 space-y-1">
+                            <li>Trade fails if user doesn't own enough shares.</li>
+                            <li>Portfolio holdings are updated correctly.</li>
+                            <li>Cash balance is increased by the correct amount.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="story-card border-l-amber-500">
+                    <span class="epic-label epic-journal">EPIC: Journaling</span>
+                    <p class="id">HT-10</p>
+                    <p class="title">As a user, I want to be prompted to complete a journal entry after a trade.</p>
+                     <div class="mt-3 pt-2 border-t">
+                        <h4 class="ac-title">Acceptance Criteria</h4>
+                        <ul class="list-disc list-inside text-sm text-gray-600 mt-1 space-y-1">
+                            <li>Modal appears immediately after a successful trade.</li>
+                            <li>Modal blocks other actions until submitted.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- In Progress Column -->
+            <div class="kanban-column">
+                <h2 class="column-title">In Progress</h2>
+                <div class="story-card border-l-blue-500">
+                     <span class="epic-label epic-auth">EPIC: Onboarding</span>
+                    <p class="id">HT-3</p>
+                    <p class="title">As a logged-in user, I want to have a visible logout option.</p>
+                     <div class="mt-3 pt-2 border-t">
+                        <h4 class="ac-title">Acceptance Criteria</h4>
+                        <ul class="list-disc list-inside text-sm text-gray-600 mt-1 space-y-1">
+                            <li>Logout button is always visible when logged in.</li>
+                            <li>Clicking it ends the session and returns to login page.</li>
+                        </ul>
+                    </div>
+                </div>
+                 <div class="story-card border-l-blue-500">
+                     <span class="epic-label epic-auth">EPIC: Onboarding</span>
+                    <p class="id">HT-4</p>
+                    <p class="title">As a new user, I want to receive a starting virtual cash balance.</p>
+                    <div class="mt-3 pt-2 border-t">
+                        <h4 class="ac-title">Acceptance Criteria</h4>
+                        <ul class="list-disc list-inside text-sm text-gray-600 mt-1 space-y-1">
+                            <li>Balance is exactly $100,000.</li>
+                            <li>Balance is visible on the main dashboard.</li>
+                        </ul>
+                    </div>
+                </div>
+                 <div class="story-card border-l-green-500">
+                    <span class="epic-label epic-trading">EPIC: Core Trading</span>
+                    <p class="id">HT-5</p>
+                    <p class="title">As a user, I want to search for a stock by its ticker symbol.</p>
+                     <div class="mt-3 pt-2 border-t">
+                        <h4 class="ac-title">Acceptance Criteria</h4>
+                        <ul class="list-disc list-inside text-sm text-gray-600 mt-1 space-y-1">
+                            <li>Search works for valid US stock tickers.</li>
+                            <li>Displays current price upon finding a match.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="story-card border-l-blue-500">
+                    <span class="epic-label epic-auth">EPIC: Onboarding</span>
+                    <p class="id">HT-8</p>
+                    <p class="title">As a user, I want to see a clear dashboard of all the stocks I currently own, including the quantity and current market value of each position.</p>
+                     <div class="mt-3 pt-2 border-t">
+                        <h4 class="ac-title">Acceptance Criteria</h4>
+                        <ul class="list-disc list-inside text-sm text-gray-600 mt-1 space-y-1">
+                            <li>Table shows Ticker, Quantity, and Current Value for each purchase.</li>
+                            <li>Separate purchases of the same stock are listed as distinct line items.</li>
+                            <li>Data updates in near real-time with market prices.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Done Column -->
+            <div class="kanban-column">
+                <h2 class="column-title">Done</h2>
+                <div class="story-card border-l-blue-500 opacity-70">
+                    <span class="epic-label epic-auth">EPIC: Onboarding</span>
+                    <p class="id">HT-1</p>
+                    <p class="title">As a new user, I want to sign up with my email and password.</p>
+                    <div class="mt-3 pt-2 border-t">
+                        <h4 class="ac-title">Acceptance Criteria</h4>
+                        <ul class="list-disc list-inside text-sm text-gray-600 mt-1 space-y-1">
+                            <li>Must use a valid email format.</li>
+                            <li>Password must be at least 8 characters.</li>
+                            <li>User is redirected to dashboard on success.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="story-card border-l-blue-500 opacity-70">
+                     <span class="epic-label epic-auth">EPIC: Onboarding</span>
+                    <p class="id">HT-2</p>
+                    <p class="title">As a returning user, I want to log in to access my account.</p>
+                    <div class="mt-3 pt-2 border-t">
+                        <h4 class="ac-title">Acceptance Criteria</h4>
+                        <ul class="list-disc list-inside text-sm text-gray-600 mt-1 space-y-1">
+                            <li>Shows error on incorrect credentials.</li>
+                            <li>Redirects to dashboard on success.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+

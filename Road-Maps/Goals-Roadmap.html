@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HypeTrade: Product Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F9FAFB;
+        }
+        .goal-card {
+            background-color: #0d47a1; /* A deep blue for the goal card */
+            color: white;
+        }
+        .initiative-header {
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem 0.375rem 0 0;
+            font-weight: 700;
+        }
+        .feature-card, .metrics-card {
+            background-color: #ffffff;
+            border: 1px solid #E5E7EB;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        }
+        .metrics-card {
+            background-color: #E3F2FD;
+            border-color: #BBDEFB;
+        }
+        .metrics-card-green { background-color: #E8F5E9; border-color: #C8E6C9; }
+        .metrics-card-yellow { background-color: #FFFDE7; border-color: #FFF59D; }
+        .metrics-card-orange { background-color: #FFF3E0; border-color: #FFCC80; }
+
+        .phase-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid;
+        }
+        .timeline-bar {
+            background-color: #E5E7EB;
+            border-radius: 9999px;
+            overflow: hidden;
+            height: 2.5rem;
+            display: flex;
+            box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+        }
+        .timeline-segment {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-align: center;
+            padding: 0 1rem;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="text-left mb-10 pb-4 border-b border-gray-200">
+            <h1 class="text-4xl font-bold text-gray-900">HypeTrade Product Roadmap</h1>
+            <p class="mt-2 text-lg text-gray-600">Turn market hype into your strategic trades.</p>
+        </header>
+
+        <main class="space-y-12">
+            
+            <section id="strategy">
+                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="md:col-span-2 goal-card p-6 rounded-lg">
+                        <h2 class="text-2xl font-bold mb-2">Our Primary Goal</h2>
+                        <p class="text-lg text-gray-200">To help retail traders cut through market hype by documenting the "why" behind every decision, analyzing their patterns, understanding how hype influences their choices, and building a disciplined strategy that works.</p>
+                    </div>
+                     <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                        <h3 class="text-xl font-bold text-[#0d47a1] mb-3">Who We're Building For</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li><span class="font-semibold">The Aspiring Trader:</span> Eager to start but needs to learn emotional control.</li>
+                            <li><span class="font-semibold">The Retail Trader:</span> Actively trading but wants to find and fix hidden biases in their strategy.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="timeline-overview">
+                <h2 class="text-2xl font-bold mb-4">Timeline</h2>
+                <div class="timeline-bar">
+                    <div class="timeline-segment" style="width: 15%; background-color: #42A5F5;">Phase 1: MVP</div>
+                    <div class="timeline-segment" style="width: 25%; background-color: #66BB6A;">Phase 2: Analytics</div>
+                    <div class="timeline-segment" style="width: 30%; background-color: #FFEE58; color: #424242;">Phase 3: Scale</div>
+                    <div class="timeline-segment" style="width: 30%; background-color: #FFA726;">Phase 4: Growth</div>
+                </div>
+            </section>
+
+            <section id="roadmap-details">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    
+                    <!-- Column 1: Phase 1 -->
+                    <div class="phase-1">
+                        <h2 class="phase-title" style="border-color: #42A5F5;">Now (First Month)</h2>
+                        <div class="bg-white rounded-lg border border-gray-200 shadow-sm mb-6">
+                            <div class="initiative-header" style="background-color: #42A5F5; color: white;">Core MVP</div>
+                            <div class="p-4 space-y-3">
+                                <div class="feature-card">
+                                    <h4 class="font-semibold">Accounts & Paper Trading</h4>
+                                    <p class="text-sm text-gray-600">Set up your profile and trade in a risk-free simulation.</p>
+                                </div>
+                                <div class="feature-card">
+                                    <h4 class="font-semibold">The "Why" Journal</h4>
+                                    <p class="text-sm text-gray-600">Log the rationale behind every trade to uncover your patterns.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="metrics-card">
+                            <div class="p-4">
+                                <h4 class="font-bold text-blue-800 mb-2">Success Metrics</h4>
+                                <ul class="list-disc list-inside text-sm text-blue-900 space-y-1">
+                                    <li><span class="font-semibold">Activation:</span> &gt;60% of signups log their first trade.</li>
+                                    <li><span class="font-semibold">Engagement:</span> &gt;40% of users log 3+ trades in week one.</li>
+                                    <li><span class="font-semibold">Retention:</span> &gt;25% of users return after their first week.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Phase 2 -->
+                    <div class="phase-2">
+                        <h2 class="phase-title" style="border-color: #66BB6A;">Next (Months 2-4)</h2>
+                        <div class="bg-white rounded-lg border border-gray-200 shadow-sm mb-6">
+                            <div class="initiative-header" style="background-color: #66BB6A; color: white;">Data & Analytics</div>
+                            <div class="p-4 space-y-3">
+                                <div class="feature-card">
+                                    <h4 class="font-semibold">Personal Strategy Analytics</h4>
+                                    <p class="text-sm text-gray-600">Discover which strategies actually work for you.</p>
+                                </div>
+                                 <div class="feature-card">
+                                    <h4 class="font-semibold">Deep-Dive Trade History</h4>
+                                    <p class="text-sm text-gray-600">Filter and search your entire trade history for key insights.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="metrics-card metrics-card-green">
+                            <div class="p-4">
+                                <h4 class="font-bold text-green-800 mb-2">Success Metrics</h4>
+                                <ul class="list-disc list-inside text-sm text-green-900 space-y-1">
+                                    <li><span class="font-semibold">Adoption:</span> &gt;30% of active users visit analytics weekly.</li>
+                                    <li><span class="font-semibold">Value:</span> 15% increase in 30-day user retention.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 3: Phase 3 -->
+                    <div class="phase-3">
+                        <h2 class="phase-title" style="border-color: #FFEE58;">Later (Months 5-8)</h2>
+                         <div class="bg-white rounded-lg border border-gray-200 shadow-sm mb-6">
+                            <div class="initiative-header" style="background-color: #FFEE58; color: #424242;">UX & Scale</div>
+                            <div class="p-4 space-y-3">
+                                <div class="feature-card">
+                                    <h4 class="font-semibold">Intuitive Redesign</h4>
+                                    <p class="text-sm text-gray-600">A polished new user experience based on your feedback.</p>
+                                </div>
+                                <div class="feature-card">
+                                    <h4 class="font-semibold">Community Pulse</h4>
+                                    <p class="text-sm text-gray-600">See what's driving the market with community insights.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="metrics-card metrics-card-yellow">
+                            <div class="p-4">
+                                <h4 class="font-bold text-yellow-800 mb-2">Success Metrics</h4>
+                                <ul class="list-disc list-inside text-sm text-yellow-900 space-y-1">
+                                    <li><span class="font-semibold">Satisfaction:</span> Improve App Store rating to 4.5+ stars.</li>
+                                    <li><span class="font-semibold">Growth:</span> 20% increase in user-to-user shares.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 4: Phase 4 -->
+                    <div class="phase-4">
+                        <h2 class="phase-title" style="border-color: #FFA726;">Future (Months 9+)</h2>
+                         <div class="bg-white rounded-lg border border-gray-200 shadow-sm mb-6">
+                            <div class="initiative-header" style="background-color: #FFA726; color: white;">Growth & Monetization</div>
+                            <div class="p-4 space-y-3">
+                                <div class="feature-card">
+                                    <h4 class="font-semibold">HypeTrade Premium</h4>
+                                    <p class="text-sm text-gray-600">Unlock powerful new tools with a subscription.</p>
+                                </div>
+                                 <div class="feature-card">
+                                    <h4 class="font-semibold">AI-Powered Tips</h4>
+                                    <p class="text-sm text-gray-600">Get personalized tips based on your winning habits.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="metrics-card metrics-card-orange">
+                            <div class="p-4">
+                                <h4 class="font-bold text-orange-800 mb-2">Success Metrics</h4>
+                                <ul class="list-disc list-inside text-sm text-orange-900 space-y-1">
+                                    <li><span class="font-semibold">Conversion:</span> Achieve a 5% free-to-paid user conversion rate.</li>
+                                    <li><span class="font-semibold">ROI:</span> Generate positive return on investment for AI features.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <section id="dependencies-risks">
+                <h2 class="text-2xl font-bold mb-4"> Known Dependencies & Risks</h2>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <ul class="list-disc list-inside space-y-3 text-gray-700">
+                        <li>
+                            <span class="font-semibold text-gray-800">API Access (Phase 1 & Beyond):</span> Our ability to provide real-time, accurate market data is dependent on reliable and affordable API access from data providers.
+                        </li>
+                        <li>
+                            <span class="font-semibold text-gray-800">User Adoption & Data Volume (Phase 2 & 3):</span> The effectiveness of our analytics and community features relies on achieving a critical mass of active users who consistently log their trades. Low adoption is a key risk.
+                        </li>
+                         <li>
+                            <span class="font-semibold text-gray-800">AI Accuracy (Phase 4):</span> The quality of our AI-powered tips is directly dependent on the volume and quality of the trade data collected. Insufficient data will limit the feature's effectiveness.
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="text-center mt-16 pt-8 border-t border-gray-200">
+            <p class="text-gray-500">HypeTrade Product Strategy | Document generated on August 2025</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>
