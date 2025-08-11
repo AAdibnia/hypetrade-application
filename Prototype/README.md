@@ -11,6 +11,11 @@ This folder contains the design‑aligned UI prototype. The flows and components
 - Consistent theme (buttons, cards, inputs, modals) matching the MVP
 - Useful as a visual/styling reference and for trying UI variations
 
+## Why keep this
+- Showcases the Figma→implementation alignment
+- Serves as a fast playground for UI tweaks without touching the MVP
+- Documents UI decisions that informed the MVP
+
 ## Project notes
 - Entry: `index.html` and `src/main.tsx` mount `App` from `Prototype/App.tsx`
 - Styles: `src/index.css` imports Tailwind and `styles/globals.css`
@@ -22,8 +27,3 @@ If you prefer to preview in a separate sandbox instead, you can still scaffold a
 - `Prototype/components/` → `your-sandbox/src/components/`
 - `Prototype/App.tsx` → `your-sandbox/src/App.tsx`
 - `Prototype/styles/globals.css` → merge into your sandbox CSS
-
-## Why keep this
-- Showcases the Figma→implementation alignment
-- Serves as a fast playground for UI tweaks without touching the MVP
-- Documents UI decisions that informed the MVP
