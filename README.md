@@ -18,7 +18,6 @@ HypeTrad helps retail traders cut through market hype by documenting the why beh
 - `MVP/` — Web MVP (React + TypeScript + Tailwind)
 - `Prototype/` — Early prototype UI and styles
 - `Road-Maps/` — Goals, epics, roadmaps, and boards
-- `docs/` — PM docs (Decisions, Roadmap, Metrics)
 
 ## Why This Is a Strong PM Showcase
 - Clear MVP scope focused on journaling discipline and repeatable decisions
