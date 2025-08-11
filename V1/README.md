@@ -122,6 +122,7 @@ V1/
 - Easier future migration to a real backend without UI rewrites
 - Positions view (V1-only): Sell rows are grouped under their originating buy lot, newest-first, with a Remaining shares indicator on the buy row (applies to mobile and desktop)
 - Login (V1-only): "Remember me" option persists your session on this device
+- Journal (V1-only): Skip option removed; journal entry required after buy/sell
 
 ## Product Framing (PM Showcase)
 

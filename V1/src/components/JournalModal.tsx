@@ -16,11 +16,7 @@ interface JournalModalProps {
   isOpen: boolean;
   onClose: () => void;
   trade: Trade | null;
-  onSave: (
-    sources: string[],
-    rationale: string,
-    sentiment?: 'bullish' | 'neutral' | 'bearish'
-  ) => void;
+  onSave: (sources: string[], rationale: string) => void;
 }
 
 const informationSources = [
@@ -34,7 +30,6 @@ const informationSources = [
 export function JournalModal({ isOpen, onClose, trade, onSave }: JournalModalProps) {
   const [selectedSources, setSelectedSources] = useState<string[]>([]);
   const [rationale, setRationale] = useState('');
-  const [sentiment, setSentiment] = useState<'bullish' | 'neutral' | 'bearish' | undefined>(undefined);
 
   if (!isOpen || !trade) return null;
 
@@ -47,11 +42,10 @@ export function JournalModal({ isOpen, onClose, trade, onSave }: JournalModalPro
   };
 
   const handleSave = () => {
-    onSave(selectedSources, rationale, sentiment);
+    onSave(selectedSources, rationale);
     // Reset form
     setSelectedSources([]);
     setRationale('');
-    setSentiment(undefined);
   };
 
   const formatCurrency = (amount: number) => {
@@ -144,41 +138,11 @@ export function JournalModal({ isOpen, onClose, trade, onSave }: JournalModalPro
             />
           </div>
 
-          {/* Tags removed per request */}
-
-          {/* Sentiment */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-600">Sentiment</label>
-            <div className="flex gap-2">
-              {([
-                { key: 'bullish', label: 'Bullish', className: 'bg-green-600 hover:bg-green-700' },
-                { key: 'neutral', label: 'Neutral', className: 'bg-gray-600 hover:bg-gray-700' },
-                { key: 'bearish', label: 'Bearish', className: 'bg-red-600 hover:bg-red-700' },
-              ] as const).map(opt => (
-                <button
-                  key={opt.key}
-                  type="button"
-                  onClick={() => setSentiment(opt.key)}
-                  className={`px-3 h-8 rounded-md text-white text-xs ${opt.className} ${sentiment === opt.key ? 'ring-2 ring-offset-1 ring-blue-300' : ''}`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex space-x-3 pt-2">
-            <Button 
-              variant="outline" 
-              onClick={onClose} 
-              className="flex-1 h-8 border-gray-300"
-            >
-              Skip Journal Entry
-            </Button>
+          {/* Action Button */}
+          <div className="flex pt-2">
             <Button 
               onClick={handleSave} 
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white h-8"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white h-8"
               disabled={selectedSources.length === 0 && !rationale.trim()}
             >
               Save Entry
