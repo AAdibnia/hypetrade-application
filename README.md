@@ -75,4 +75,4 @@ Then restart `npm start`.
 - Prices update every minute (random walk); fallback to last trade price or purchase price
 
 ## License
-MIT (or your choice)
+MIT — see `LICENSE` in the repo root.
