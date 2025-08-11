@@ -124,8 +124,8 @@ export default function App() {
     saveUsersMap(map);
   };
 
-  const handleLogin = (email: string, password: string, remember: boolean = false) => {
-    if (!email || password.length < 8) return;
+  const handleLogin = (email: string, password: string, remember: boolean = false): boolean => {
+    if (!email || password.length < 8) return false;
     const map = loadUsersMap();
     const record = map[email];
     if (record && record.password === password) {
@@ -134,7 +134,9 @@ export default function App() {
       setPositions(Array.isArray(record.positions) ? record.positions : []);
       setTrades(Array.isArray(record.trades) ? record.trades : []);
       setCurrentView('dashboard');
+      return true;
     }
+    return false;
   };
 
   const handleSignUp = (email: string, password: string) => {

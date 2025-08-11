@@ -3,7 +3,7 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 
 interface LoginFormProps {
-  onLogin: (email: string, password: string, remember: boolean) => void;
+  onLogin: (email: string, password: string, remember: boolean) => boolean;
 }
 
 export function LoginForm({ onLogin }: LoginFormProps) {
@@ -11,6 +11,7 @@ export function LoginForm({ onLogin }: LoginFormProps) {
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [formError, setFormError] = useState<string | null>(null);
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {};
@@ -33,8 +34,12 @@ export function LoginForm({ onLogin }: LoginFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError(null);
     if (validateForm()) {
-      onLogin(email, password, remember);
+      const ok = onLogin(email, password, remember);
+      if (!ok) {
+        setFormError('Invalid email or password');
+      }
     }
   };
 
@@ -90,6 +95,12 @@ export function LoginForm({ onLogin }: LoginFormProps) {
         </label>
         <span className="text-xs text-gray-500">Private device only</span>
       </div>
+
+      {formError && (
+        <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-md p-2">
+          {formError}
+        </div>
+      )}
 
       <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white h-8">
         Log In
