@@ -23,7 +23,7 @@ HypeTrad helps retail traders cut through market hype by documenting the why beh
 
 1. Navigate to the MVP directory:
 ```bash
-cd MVP
+cd hypetrade/MVP
 ```
 
 2. Install dependencies:
