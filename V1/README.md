@@ -1,6 +1,6 @@
-# HypeTrad — Web MVP
+# HypeTrade — V1 (API‑ready Client)
 
-HypeTrad helps retail traders cut through market hype by documenting the why behind every decision, analyzing patterns, and building disciplined strategies.
+HypeTrade helps retail traders cut through market hype by documenting the why behind trades, analyzing patterns, and building disciplined strategies.
 
 ## Features (MVP)
 
@@ -12,7 +12,7 @@ HypeTrad helps retail traders cut through market hype by documenting the why beh
 - **Responsive Design**: Mobile-friendly interface
 - **Real-time Updates**: Simulated price updates every minute
 
-## Getting Started
+## Getting Started (V1)
 
 ### Prerequisites
 
@@ -21,9 +21,9 @@ HypeTrad helps retail traders cut through market hype by documenting the why beh
 
 ### Installation
 
-1. Navigate to the MVP directory:
+1. Navigate to the V1 directory:
 ```bash
-cd MVP
+cd V1
 ```
 
 2. Install dependencies:
@@ -40,13 +40,19 @@ npm start
 
 Optional: live search via RapidAPI (Yahoo Finance)
 
-Create `MVP/.env`:
+Create `V1/.env`:
 
 ```
 REACT_APP_RAPIDAPI_KEY=YOUR_KEY
 ```
 
 Restart `npm start`.
+
+Optional: API mode (future server integration)
+```
+# Defaults to local mock adapter if omitted
+REACT_APP_API_MODE=local
+```
 
 ## Usage
 
@@ -72,11 +78,12 @@ Restart `npm start`.
 - **shadcn/ui** components
 - **Lucide React** for icons
 - **Create React App** for build tooling
+  - API abstraction via context/provider and adapters
 
 ## Project Structure
 
 ```
-MVP/
+V1/
 ├── public/
 │   └── index.html
 ├── src/
@@ -85,6 +92,10 @@ MVP/
 │   │   ├── LoginForm.tsx
 │   │   ├── SignUpForm.tsx
 │   │   └── Dashboard.tsx
+│   ├── api/              # API layer (contracts + local adapter + provider)
+│   │   ├── client.tsx
+│   │   ├── contracts.ts
+│   │   └── local.ts
 │   ├── lib/
 │   │   └── utils.ts      # Utility functions
 │   ├── App.tsx           # Main app component
@@ -94,6 +105,21 @@ MVP/
 ├── tailwind.config.js
 └── README.md
 ```
+
+## Architecture (V1)
+
+- API contracts in `src/api/contracts.ts`
+- Adapters (ports/adapters pattern):
+  - `LocalApi` in `src/api/local.ts` (uses `localStorage` for persistence)
+  - `Quotes` adapter calls RapidAPI if `REACT_APP_RAPIDAPI_KEY` is set, otherwise falls back to a local curated list
+- Provider and hook in `src/api/client.tsx`:
+  - Wraps the app and exposes a stable API surface for UI components
+- No server required today; when a backend exists, add an `HttpApi` adapter and switch via `REACT_APP_API_MODE`
+
+## Differences vs `MVP/`
+
+- UI workflow is the same; code now calls a stable API layer instead of touching storage directly
+- Easier future migration to a real backend without UI rewrites
 
 ## Product Framing (PM Showcase)
 
@@ -110,6 +136,11 @@ The app is built with a modular component structure:
 - **Dashboard.tsx**: Portfolio management and trading interface
 - **LoginForm.tsx**: User authentication
 - **SignUpForm.tsx**: User registration
+
+Additionally for V1:
+- **api/contracts.ts**: typed API contracts
+- **api/local.ts**: local implementation (no server)
+- **api/client.tsx**: provider + `useApi()` hook
 
 ## Mock Data
 
