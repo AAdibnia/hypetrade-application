@@ -245,7 +245,7 @@ export function TradeModal({
     }, 300);
 
     return () => clearTimeout(timeoutId);
-  }, [searchTicker]);
+  }, [searchTicker, EXTRA_FALLBACK, stocks]);
 
   const handleSelectResult = (item: { ticker: string; companyName: string; price: number }) => {
     setSelectedStock({ ticker: item.ticker, companyName: item.companyName, currentPrice: item.price });
