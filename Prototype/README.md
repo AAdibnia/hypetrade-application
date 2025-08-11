@@ -3,14 +3,8 @@
 This folder contains the design‑aligned UI prototype. The flows and components were first designed in Figma, then translated into React + Tailwind markup for visual reference. These files are not wired to live data.
 
 ## Quickstart (built-in)
-This folder now includes a lightweight Vite + React + TypeScript + Tailwind setup so you can run it directly.
-
-```bash
-cd Prototype
-npm install
-npm run dev
-```
-Then open the local URL shown in the terminal (e.g., http://localhost:5173).
+[This is a link to the prototpe.
+](https://slaw-raster-12547559.figma.site/)
 
 ## What this is
 - Figma‑driven UI translated into React components
