@@ -44,8 +44,6 @@ interface Trade {
   journalEntry?: {
     sources: string[];
     rationale: string;
-    tags?: string[];
-    sentiment?: 'bullish' | 'neutral' | 'bearish';
   };
 }
 
@@ -78,7 +76,29 @@ export function Dashboard({ user, onLogout, positions, setPositions, trades, set
   const [selectedTradeForHistory, setSelectedTradeForHistory] = useState<Trade | null>(null);
 
   // Local persistence helpers (mirrors App.tsx) per email account
-  // V1: persistence handled in App
+  const STORAGE_KEY = 'hypetrad_users_v1';
+  const loadUsersMap = (): Record<string, any> => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? (JSON.parse(raw) as Record<string, any>) : {};
+    } catch {
+      return {} as Record<string, any>;
+    }
+  };
+  const saveUsersMap = (map: Record<string, any>) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(map));
+  };
+  const persistCurrentUser = (data: { cashBalance: number; positions: Position[]; trades: Trade[] }) => {
+    if (!user?.email) return;
+    const map = loadUsersMap();
+    map[user.email] = {
+      password: map[user.email]?.password ?? '',
+      cashBalance: data.cashBalance,
+      positions: data.positions,
+      trades: data.trades,
+    };
+    saveUsersMap(map);
+  };
 
 
   // Simulate real-time price updates
@@ -164,21 +184,18 @@ export function Dashboard({ user, onLogout, positions, setPositions, trades, set
     return position.quantity < 0;
   };
 
-  // removed unused helper to satisfy linter
+  const getPositionType = (position: Position) => {
+    return isSellPosition(position) ? 'Sell' : 'Buy';
+  };
 
   const getAvailableSharesForPosition = (position: Position) => {
     // For each individual position, check if it has any shares left to sell
     if (position.quantity <= 0) return 0; // Already a sell position or no shares
     
-    // Count how many shares from this specific position have been sold (V1: use explicit parent link; fallback only if no links exist)
-    const sellsLinked = positions.filter(p => p.quantity < 0 && p.parentPositionId === position.id);
-    let soldFromThisPosition = sellsLinked.reduce((sum, p) => sum + Math.abs(p.quantity), 0);
-    if (soldFromThisPosition === 0) {
-      // Fallback for legacy rows without parentPositionId
-      soldFromThisPosition = positions
-        .filter(p => p.ticker === position.ticker && p.quantity < 0 && p.purchasePrice === position.purchasePrice)
-        .reduce((sum, p) => sum + Math.abs(p.quantity), 0);
-    }
+    // Count how many shares from this specific position have been sold
+    const soldFromThisPosition = positions
+      .filter(p => p.ticker === position.ticker && p.quantity < 0 && (p.parentPositionId === position.id || p.purchasePrice === position.purchasePrice))
+      .reduce((sum, p) => sum + Math.abs(p.quantity), 0);
     
     return Math.max(0, position.quantity - soldFromThisPosition);
   };
@@ -369,8 +386,8 @@ export function Dashboard({ user, onLogout, positions, setPositions, trades, set
                                   size="sm"
                                   variant="outline"
                                   onClick={() => handleSellClick(buy)}
-                                  disabled={buy.quantity <= 0}
-                                  className={`flex-1 ${getAvailableSharesForPosition(buy) > 0 ? 'bg-red-600 hover:bg-red-700 text-white border-red-600' : 'bg-gray-100 text-gray-400 border-gray-200'}`}
+                                  disabled={getAvailableSharesForPosition(buy) <= 0}
+                                  className={`flex-1 ${getAvailableSharesForPosition(buy) > 0 ? 'bg-red-600 hover:bg-red-700 text-white border-red-600' : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'}`}
                                 >
                                   Sell
                                 </Button>
@@ -479,8 +496,8 @@ export function Dashboard({ user, onLogout, positions, setPositions, trades, set
                                       size="sm"
                                       variant="outline"
                                       onClick={() => handleSellClick(buy)}
-                                      disabled={buy.quantity <= 0}
-                                      className={`${getAvailableSharesForPosition(buy) > 0 ? 'bg-red-600 hover:bg-red-700 text-white border-red-600' : 'bg-gray-100 text-gray-400 border-gray-200'}`}
+                                      disabled={getAvailableSharesForPosition(buy) <= 0}
+                                      className={`${getAvailableSharesForPosition(buy) > 0 ? 'bg-red-600 hover:bg-red-700 text-white border-red-600' : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'}`}
                                     >
                                       Sell
                                     </Button>
@@ -638,19 +655,6 @@ export function Dashboard({ user, onLogout, positions, setPositions, trades, set
                         <p className="text-gray-800 text-sm">{selectedTradeForHistory.journalEntry.rationale}</p>
                       </div>
                     </div>
-                    {/* Tags removed per request */}
-                    {selectedTradeForHistory.journalEntry.sentiment && (
-                      <div>
-                        <label className="block text-sm text-gray-600 mb-2">Sentiment</label>
-                        <span className={`px-2 py-1 rounded-full text-xs ${
-                          selectedTradeForHistory.journalEntry.sentiment === 'bullish' ? 'bg-green-100 text-green-800' :
-                          selectedTradeForHistory.journalEntry.sentiment === 'bearish' ? 'bg-red-100 text-red-800' :
-                          'bg-gray-100 text-gray-800'
-                        }`}>
-                          {selectedTradeForHistory.journalEntry.sentiment}
-                        </span>
-                      </div>
-                    )}
                   </div>
                 )}
               </div>

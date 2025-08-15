@@ -18,7 +18,6 @@ HypeTrade helps retail traders cut through market hype by documenting the why be
 - `MVP/` — Web MVP (React + TypeScript + Tailwind)
 - `V1/` — API-ready client (same UI as MVP with an API layer and adapters)
   - V1-only UI: positions group sells under their buy lot, newest-first, with remaining shares
-  - V1-only UI: journal entries include sentiment (shown in Trade Details)
 - `Prototype/` — Early prototype UI and styles
 - `Road-Maps/` — Goals, epics, roadmaps, and boards
 

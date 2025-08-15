@@ -12,6 +12,8 @@ export function LoginForm({ onLogin }: LoginFormProps) {
   const [remember, setRemember] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const [formError, setFormError] = useState<string | null>(null);
+  const [resetNotice, setResetNotice] = useState<string | null>(null);
+  const [resetError, setResetError] = useState<string | null>(null);
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {};
@@ -41,6 +43,17 @@ export function LoginForm({ onLogin }: LoginFormProps) {
         setFormError('Invalid email or password');
       }
     }
+  };
+
+  const handleForgotPassword = () => {
+    setResetNotice(null);
+    setResetError(null);
+    // Require a valid email to proceed (stubbed flow)
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      setResetError('Enter a valid email to receive reset instructions');
+      return;
+    }
+    setResetNotice(`If an account exists for ${email}, a reset link has been sent.`);
   };
 
   return (
@@ -102,9 +115,31 @@ export function LoginForm({ onLogin }: LoginFormProps) {
         </div>
       )}
 
+      {resetError && (
+        <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-md p-2">
+          {resetError}
+        </div>
+      )}
+
+      {resetNotice && (
+        <div className="bg-blue-50 border border-blue-200 text-blue-700 text-sm rounded-md p-2">
+          {resetNotice}
+        </div>
+      )}
+
       <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white h-8">
         Log In
       </Button>
+
+      <div className="mt-2 text-right">
+        <button
+          type="button"
+          onClick={handleForgotPassword}
+          className="text-xs text-blue-600 hover:underline"
+        >
+          Forgot password?
+        </button>
+      </div>
       </form>
     </div>
   );
