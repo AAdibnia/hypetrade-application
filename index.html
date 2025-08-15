@@ -1,0 +1,1663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HypeTrade V1 - HTML Prototype</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables matching V1 theme */
+        :root {
+            --font-size: 14px;
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --background: #ffffff;
+            --foreground: #1a1a1a;
+            --card: #ffffff;
+            --card-foreground: #1a1a1a;
+            --primary: #2563eb;
+            --primary-foreground: #ffffff;
+            --secondary: #f1f5f9;
+            --secondary-foreground: #2563eb;
+            --muted: #ececf0;
+            --muted-foreground: #717182;
+            --accent: #e9ebef;
+            --accent-foreground: #2563eb;
+            --destructive: #d4183d;
+            --destructive-foreground: #ffffff;
+            --border: rgba(0, 0, 0, 0.1);
+            --input-background: #f3f3f5;
+            --radius: 0.625rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            font-size: var(--font-size);
+            font-weight: 400;
+            line-height: 1.5;
+            color: var(--foreground);
+            background-color: var(--background);
+        }
+
+        /* Utility Classes */
+        .min-h-screen { min-height: 100vh; }
+        .bg-blue-50 { background-color: #eff6ff; }
+        .bg-gray-50 { background-color: #f9fafb; }
+        .bg-white { background-color: white; }
+        .bg-blue-600 { background-color: #2563eb; }
+        .bg-blue-700 { background-color: #1d4ed8; }
+        .bg-red-600 { background-color: #dc2626; }
+        .bg-red-700 { background-color: #b91c1c; }
+        .bg-gray-100 { background-color: #f3f4f6; }
+        .bg-gray-200 { background-color: #e5e7eb; }
+        .bg-green-100 { background-color: #dcfce7; }
+        .bg-red-100 { background-color: #fee2e2; }
+        .bg-blue-100 { background-color: #dbeafe; }
+        .bg-red-50 { background-color: #fef2f2; }
+        .bg-blue-50 { background-color: #eff6ff; }
+
+        .text-blue-900 { color: #1e3a8a; }
+        .text-blue-600 { color: #2563eb; }
+        .text-blue-700 { color: #1d4ed8; }
+        .text-white { color: white; }
+        .text-gray-600 { color: #4b5563; }
+        .text-gray-700 { color: #374151; }
+        .text-gray-500 { color: #6b7280; }
+        .text-gray-400 { color: #9ca3af; }
+        .text-green-600 { color: #16a34a; }
+        .text-green-800 { color: #166534; }
+        .text-red-600 { color: #dc2626; }
+        .text-red-800 { color: #991b1b; }
+        .text-red-500 { color: #ef4444; }
+        .text-red-700 { color: #b91c1c; }
+
+        .border { border: 1px solid #e5e7eb; }
+        .border-gray-200 { border-color: #e5e7eb; }
+        .border-gray-300 { border-color: #d1d5db; }
+        .border-red-500 { border-color: #ef4444; }
+        .border-red-200 { border-color: #fecaca; }
+        .border-blue-200 { border-color: #bfdbfe; }
+        .border-t { border-top: 1px solid #e5e7eb; }
+        .border-b { border-bottom: 1px solid #e5e7eb; }
+
+        .rounded-lg { border-radius: 0.5rem; }
+        .rounded-md { border-radius: 0.375rem; }
+        .rounded-full { border-radius: 9999px; }
+
+        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+
+        .flex { display: flex; }
+        .grid { display: grid; }
+        .hidden { display: none; }
+        .block { display: block; }
+        .inline-flex { display: inline-flex; }
+
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .justify-between { justify-content: space-between; }
+        .space-x-2 > * + * { margin-left: 0.5rem; }
+        .space-x-3 > * + * { margin-left: 0.75rem; }
+        .space-x-4 > * + * { margin-left: 1rem; }
+        .space-x-8 > * + * { margin-left: 2rem; }
+        .space-y-2 > * + * { margin-top: 0.5rem; }
+        .space-y-3 > * + * { margin-top: 0.75rem; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .space-y-6 > * + * { margin-top: 1.5rem; }
+
+        .p-2 { padding: 0.5rem; }
+        .p-3 { padding: 0.75rem; }
+        .p-4 { padding: 1rem; }
+        .p-6 { padding: 1.5rem; }
+        .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+        .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+        .pt-0 { padding-top: 0; }
+        .pt-2 { padding-top: 0.5rem; }
+        .pt-4 { padding-top: 1rem; }
+        .pb-1 { padding-bottom: 0.25rem; }
+        .pb-2 { padding-bottom: 0.5rem; }
+        .pb-3 { padding-bottom: 0.75rem; }
+        .mt-1 { margin-top: 0.25rem; }
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-4 { margin-top: 1rem; }
+        .mt-6 { margin-top: 1.5rem; }
+        .mt-8 { margin-top: 2rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-3 { margin-bottom: 0.75rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .ml-1 { margin-left: 0.25rem; }
+        .ml-2 { margin-left: 0.5rem; }
+        .mr-1 { margin-right: 0.25rem; }
+        .mr-2 { margin-right: 0.5rem; }
+
+        .w-full { width: 100%; }
+        .w-3 { width: 0.75rem; }
+        .h-3 { height: 0.75rem; }
+        .h-4 { height: 1rem; }
+        .h-5 { height: 1.25rem; }
+        .h-6 { height: 1.5rem; }
+        .h-7 { height: 1.75rem; }
+        .h-8 { height: 2rem; }
+        .h-12 { height: 3rem; }
+        .h-16 { height: 4rem; }
+        .w-4 { width: 1rem; }
+        .w-5 { width: 1.25rem; }
+        .w-6 { width: 1.5rem; }
+        .w-7 { width: 1.75rem; }
+        .w-12 { width: 3rem; }
+
+        .max-w-sm { max-width: 24rem; }
+        .max-w-md { max-width: 28rem; }
+        .max-w-2xl { max-width: 42rem; }
+        .max-w-7xl { max-width: 80rem; }
+
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .text-right { text-align: right; }
+
+        .text-xs { font-size: 0.75rem; line-height: 1rem; }
+        .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+        .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+        .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+
+        .font-light { font-weight: 300; }
+        .font-normal { font-weight: 400; }
+        .font-medium { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .cursor-pointer { cursor: pointer; }
+        .hover\:underline:hover { text-decoration: underline; }
+        .hover\:bg-gray-50:hover { background-color: #f9fafb; }
+        .hover\:bg-blue-700:hover { background-color: #1d4ed8; }
+        .hover\:bg-red-700:hover { background-color: #b91c1c; }
+        .hover\:text-gray-600:hover { color: #4b5563; }
+        .hover\:text-gray-900:hover { color: #111827; }
+
+        .fixed { position: fixed; }
+        .absolute { position: absolute; }
+        .relative { position: relative; }
+        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+        .z-50 { z-index: 50; }
+
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+
+        .resize-none { resize: none; }
+        .overflow-y-auto { overflow-y: auto; }
+        .overflow-x-auto { overflow-x: auto; }
+
+        .capitalize { text-transform: capitalize; }
+        .flex-1 { flex: 1; }
+
+        /* Button styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.15s ease;
+            border: 1px solid transparent;
+            cursor: pointer;
+            height: 2rem;
+            padding: 0.5rem 0.75rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--foreground);
+            border-color: #e5e7eb;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--accent);
+        }
+
+        .btn-red {
+            background-color: var(--destructive);
+            color: var(--destructive-foreground);
+        }
+
+        .btn-red:hover {
+            background-color: #b91c1c;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-sm {
+            height: 1.75rem;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        /* Input styles */
+        .input {
+            height: 2rem;
+            width: 100%;
+            border-radius: 0.375rem;
+            border: 1px solid #e5e7eb;
+            background-color: var(--input-background);
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+            color: black;
+            transition: all 0.15s ease;
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
+
+        .input::placeholder {
+            color: #9ca3af;
+        }
+
+        .input.error {
+            border-color: #ef4444;
+        }
+
+        /* Card styles */
+        .card {
+            background-color: var(--card);
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .card-header {
+            padding: 1rem 1rem 0.25rem 1rem;
+        }
+
+        .card-content {
+            padding: 0 1rem 0.75rem 1rem;
+        }
+
+        .card-title {
+            font-size: 0.875rem;
+            font-weight: 400;
+            color: var(--foreground);
+        }
+
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        th {
+            font-weight: 500;
+            color: var(--muted-foreground);
+        }
+
+        tr:hover {
+            background-color: #f9fafb;
+        }
+
+        /* Badge styles */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 9999px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-green {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-red {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Modal overlay */
+        .modal-overlay {
+            background-color: rgba(30, 58, 138, 0.7);
+        }
+
+        /* Chart placeholder */
+        .chart-placeholder {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #3b82f6 0deg 130deg,
+                #10b981 130deg 200deg,
+                #f59e0b 200deg 280deg,
+                #8b5cf6 280deg 360deg
+            );
+            position: relative;
+        }
+
+        .chart-placeholder::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 50px;
+            height: 50px;
+            background-color: white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Responsive styles */
+        @media (max-width: 640px) {
+            .sm\:hidden { display: none; }
+            .sm\:block { display: block; }
+            .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .sm\:text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+        }
+
+        @media (min-width: 640px) {
+            .sm\:hidden { display: block; }
+            .sm\:block { display: none; }
+            .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .sm\:text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+        }
+
+        @media (min-width: 1024px) {
+            .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .lg\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+        }
+
+        /* Custom scrollbar */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+
+        .textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+            resize: none;
+            font-size: 0.875rem;
+            color: black;
+            transition: all 0.15s ease;
+        }
+
+        .textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
+
+        .textarea::placeholder {
+            color: #9ca3af;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login/Signup Page -->
+    <div id="authPage" class="min-h-screen bg-blue-50 flex items-center justify-center p-4">
+        <div class="w-full max-w-sm">
+            <div class="text-center mb-8">
+                <div class="flex items-center justify-center mb-4">
+                    <svg class="h-12 w-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                    </svg>
+                </div>
+                <h1 class="text-blue-900 mb-2" style="font-size: 2.25rem; font-weight: 700;">HypeTrade</h1>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginForm" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <form class="space-y-4">
+                    <div>
+                        <h2 class="text-sm font-medium text-gray-700 mb-6">Log In</h2>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                            <input 
+                                id="loginEmail" 
+                                type="email" 
+                                class="input" 
+                                placeholder="Enter your email"
+                            />
+                            <p id="loginEmailError" class="text-red-500 text-sm mt-1 hidden">Email is required</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <input 
+                            id="loginPassword" 
+                            type="password" 
+                            class="input" 
+                            placeholder="Enter your password"
+                        />
+                        <p id="loginPasswordError" class="text-red-500 text-sm mt-1 hidden">Password must be at least 8 characters</p>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <label class="inline-flex items-center space-x-2 text-sm text-gray-700">
+                            <input type="checkbox" id="rememberMe" class="h-3 w-3 text-blue-600 border-gray-300 rounded">
+                            <span>Remember me</span>
+                        </label>
+                        <span class="text-xs text-gray-500">Private device only</span>
+                    </div>
+
+                    <div id="loginError" class="bg-red-50 border border-red-200 text-red-700 text-sm rounded-md p-2 hidden">
+                        Invalid email or password
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-full">Log In</button>
+
+                    <div class="mt-2 text-right">
+                        <button type="button" class="text-xs text-blue-600 hover:underline">
+                            Forgot password?
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signupForm" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hidden">
+                <form class="space-y-4">
+                    <div>
+                        <h2 class="text-sm font-medium text-gray-700 mb-6">Sign Up</h2>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                            <input 
+                                id="signupEmail" 
+                                type="email" 
+                                class="input" 
+                                placeholder="Enter your email"
+                            />
+                            <p id="signupEmailError" class="text-red-500 text-sm mt-1 hidden">Please enter a valid email</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <input 
+                            id="signupPassword" 
+                            type="password" 
+                            class="input" 
+                            placeholder="Enter your password"
+                        />
+                        <p id="signupPasswordError" class="text-red-500 text-sm mt-1 hidden">Password must be at least 8 characters</p>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-full">Sign Up</button>
+                </form>
+            </div>
+
+            <!-- Auth Toggle -->
+            <p class="text-center mt-4 text-sm text-gray-600">
+                <span id="authToggleText">Don't have an account?</span>
+                <button id="authToggleBtn" class="text-blue-600 hover:underline ml-1">
+                    Sign up here
+                </button>
+            </p>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="min-h-screen bg-gray-50 hidden">
+        <!-- Header -->
+        <header class="bg-white shadow-md border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center space-x-3">
+                        <button id="resetBtn" class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-md text-sm h-8 inline-flex items-center">
+                            <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                            <span>Reset</span>
+                        </button>
+                        <svg class="h-7 w-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                        <h1 class="text-blue-900" style="font-size: 1.125rem; font-weight: 600;">HypeTrade</h1>
+                    </div>
+                    
+                    <nav class="flex space-x-8">
+                        <button id="dashboardTab" class="px-3 py-2 rounded-md text-sm bg-blue-100 text-blue-700">
+                            Dashboard
+                        </button>
+                        <button id="historyTab" class="px-3 py-2 rounded-md text-sm text-gray-600 hover:text-gray-900">
+                            History
+                        </button>
+                        <button id="newTradeBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md text-sm inline-flex items-center">
+                            <svg class="h-4 w-4 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            <span>New Trade</span>
+                        </button>
+                    </nav>
+                    
+                    <button id="logoutBtn" class="flex items-center space-x-2 px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                        </svg>
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="px-4 py-6">
+            <!-- Dashboard View -->
+            <div id="dashboardView" class="space-y-6">
+                <!-- Portfolio Overview -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Cash Balance -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title text-sm font-light text-gray-600">Cash Balance</div>
+                        </div>
+                        <div class="card-content pt-0">
+                            <p id="cashBalance" class="text-lg sm:text-xl mt-4 font-normal">$100,000.00</p>
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Value -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title text-sm font-light text-gray-600">Portfolio Value</div>
+                        </div>
+                        <div class="card-content pt-0">
+                            <p id="portfolioValue" class="text-lg sm:text-xl mt-4 font-normal">$100,000.00</p>
+                        </div>
+                    </div>
+
+                    <!-- Gain/Loss -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div id="pnlTitle" class="card-title text-sm font-light text-gray-600">Total Gain</div>
+                        </div>
+                        <div class="card-content pt-0">
+                            <div class="flex items-center space-x-2 mt-4">
+                                <p id="totalPnL" class="text-lg sm:text-xl font-normal text-green-600">$0.00</p>
+                                <svg id="pnlIcon" class="h-5 w-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Allocation -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title text-sm font-light text-gray-600">Portfolio Allocation</div>
+                        </div>
+                        <div class="card-content pt-0">
+                            <div class="flex flex-col items-center space-y-3 mt-2">
+                                <div class="chart-placeholder"></div>
+                                <div id="allocationLegend" class="flex flex-wrap justify-center gap-3 text-xs">
+                                    <div class="flex items-center space-x-1">
+                                        <span class="w-3 h-3 rounded-full" style="background-color: #3b82f6;"></span>
+                                        <span class="text-gray-600">Cash 100%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Positions Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title text-blue-900 text-sm font-normal">Your Positions</div>
+                    </div>
+                    <div class="card-content pt-0">
+                        <div id="positionsContainer" class="text-center py-8 text-gray-500">
+                            <p>No positions yet. Start trading to build your portfolio!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History View -->
+            <div id="historyView" class="space-y-6 hidden">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title text-blue-900 text-sm font-normal">Trade History</div>
+                    </div>
+                    <div class="card-content pt-0">
+                        <div id="historyContainer" class="text-center py-8 text-gray-500">
+                            <p>No trades yet. Execute your first trade to see history!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Trade Modal -->
+    <div id="tradeModal" class="fixed inset-0 modal-overlay flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-lg max-w-md w-full custom-scroll" style="max-height: 90vh; overflow-y: auto;">
+            <div class="flex items-center justify-between p-4 border-b border-gray-200">
+                <h2 class="text-blue-900 text-lg font-normal">New Trade</h2>
+                <button id="closeTradeModal" class="text-gray-400 hover:text-gray-600">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="p-4 space-y-4">
+                <!-- Stock Search -->
+                <div class="space-y-2">
+                    <label class="text-sm font-medium text-gray-600">Search Stock</label>
+                    <div class="flex space-x-2">
+                        <input id="stockSearch" class="input flex-1" placeholder="Ticker/Company Name">
+                        <button id="searchBtn" class="btn btn-primary btn-sm">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Selected Stock Info -->
+                <div id="selectedStockInfo" class="card hidden">
+                    <div class="card-content pt-4">
+                        <div class="flex items-center space-x-2 mb-6">
+                            <span id="selectedTicker" class="text-blue-900 text-sm font-normal"></span>
+                            <span class="text-sm text-gray-600">-</span>
+                            <span id="selectedCompany" class="text-sm text-gray-600"></span>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-medium text-gray-600">Current Price:</span>
+                                <span id="selectedPrice" class="text-sm font-normal"></span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-medium text-gray-600">Owned Shares:</span>
+                                <span id="ownedShares" class="text-sm font-normal">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quantity -->
+                <div class="space-y-2">
+                    <label class="text-sm font-medium text-gray-600">Quantity</label>
+                    <input id="tradeQuantity" type="number" class="input" placeholder="Number of shares" min="1">
+                </div>
+
+                <!-- Order Summary -->
+                <div id="orderSummary" class="card hidden">
+                    <div class="card-header">
+                        <div class="card-title text-xs font-medium">Order Summary</div>
+                    </div>
+                    <div class="card-content pt-0">
+                        <div class="space-y-4 text-xs mt-6">
+                            <div class="flex justify-between">
+                                <span id="orderSummaryText" class="text-xs font-medium text-gray-600"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-xs font-medium text-gray-600">Price per share:</span>
+                                <span id="pricePerShare" class="text-xs font-normal"></span>
+                            </div>
+                            <div class="flex justify-between border-t border-gray-200 pt-2">
+                                <span class="text-xs font-medium text-gray-600">Total:</span>
+                                <span id="orderTotal" class="text-xs font-normal"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Display -->
+                <div id="tradeError" class="bg-red-50 border border-red-200 rounded-md p-3 hidden">
+                    <p class="text-red-600 text-sm"></p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex space-x-3 pt-2">
+                    <button id="cancelTrade" class="btn btn-outline flex-1">Cancel</button>
+                    <button id="executeTrade" class="btn btn-primary flex-1" disabled>Execute Trade</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Journal Modal -->
+    <div id="journalModal" class="fixed inset-0 bg-blue-900 bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-lg max-w-2xl w-full custom-scroll" style="max-height: 90vh; overflow-y: auto;">
+            <div class="flex items-center justify-between p-4 border-b border-gray-200">
+                <div>
+                    <h2 class="text-black text-lg font-normal">Trade Journal Entry</h2>
+                    <p class="text-xs font-light text-gray-600 mt-1">
+                        Document your reasoning for this trade while it's fresh in your mind
+                    </p>
+                </div>
+                <button id="closeJournalModal" class="text-gray-400 hover:text-gray-600">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="p-4 space-y-4">
+                <!-- Trade Summary -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title text-sm font-normal">Trade Summary</div>
+                    </div>
+                    <div class="card-content pt-0">
+                        <div class="grid grid-cols-2 gap-4 text-sm mt-4">
+                            <div>
+                                <span class="font-light text-gray-600">Action:</span>
+                                <span id="journalAction" class="ml-2 font-normal capitalize"></span>
+                            </div>
+                            <div>
+                                <span class="font-light text-gray-600">Ticker:</span>
+                                <span id="journalTicker" class="ml-2 font-normal"></span>
+                            </div>
+                            <div>
+                                <span class="font-light text-gray-600">Quantity:</span>
+                                <span id="journalQuantity" class="ml-2 font-normal"></span>
+                            </div>
+                            <div>
+                                <span class="font-light text-gray-600">Price:</span>
+                                <span id="journalPrice" class="ml-2 font-normal"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Information Sources -->
+                <div class="space-y-3">
+                    <label class="text-sm font-medium text-gray-600">
+                        What information influenced your decision? (Select all that apply)
+                    </label>
+                    <div class="grid grid-cols-1 gap-3">
+                        <div class="flex items-center space-x-2">
+                            <input type="checkbox" id="technical" value="Technical Analysis" class="h-3 w-3 text-blue-600 border-gray-300 rounded">
+                            <label for="technical" class="text-xs font-medium text-gray-600 cursor-pointer">Technical Analysis</label>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <input type="checkbox" id="fundamental" value="Fundamental Analysis" class="h-3 w-3 text-blue-600 border-gray-300 rounded">
+                            <label for="fundamental" class="text-xs font-medium text-gray-600 cursor-pointer">Fundamental Analysis</label>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <input type="checkbox" id="news" value="News" class="h-3 w-3 text-blue-600 border-gray-300 rounded">
+                            <label for="news" class="text-xs font-medium text-gray-600 cursor-pointer">News</label>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <input type="checkbox" id="social" value="Social Media" class="h-3 w-3 text-blue-600 border-gray-300 rounded">
+                            <label for="social" class="text-xs font-medium text-gray-600 cursor-pointer">Social Media</label>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <input type="checkbox" id="gut" value="Gut Feeling" class="h-3 w-3 text-blue-600 border-gray-300 rounded">
+                            <label for="gut" class="text-xs font-medium text-gray-600 cursor-pointer">Gut Feeling</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rationale -->
+                <div class="space-y-2">
+                    <label class="text-sm font-medium text-gray-600">
+                        Explain your reasoning for this trade
+                    </label>
+                    <textarea
+                        id="tradeRationale"
+                        placeholder="Describe why you made this trade decision. What factors led you to buy/sell? What are your expectations?"
+                        rows="4"
+                        class="textarea"
+                    ></textarea>
+                </div>
+
+                <!-- Action Button -->
+                <div class="flex pt-2">
+                    <button id="saveJournal" class="btn btn-primary w-full" disabled>Save Entry</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reset Confirmation Modal -->
+    <div id="resetModal" class="fixed inset-0 modal-overlay flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-lg max-w-md w-full">
+            <div class="flex items-center justify-between p-4 border-b border-gray-200">
+                <h2 class="text-blue-900 text-lg font-normal">Reset account?</h2>
+                <button id="closeResetModal" class="text-gray-400 hover:text-gray-600">×</button>
+            </div>
+            <div class="p-4 space-y-4">
+                <p class="text-sm text-gray-700">
+                    This will reset your account to its initial state: cash to $100,000 and remove all positions, trades, and journal entries. This cannot be undone.
+                </p>
+                <div class="flex space-x-3 pt-2">
+                    <button id="cancelReset" class="btn btn-outline flex-1">Cancel</button>
+                    <button id="confirmReset" class="btn btn-red flex-1">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Application state
+        let currentUser = null;
+        let currentView = 'login';
+        let cashBalance = 100000;
+        let positions = [];
+        let trades = [];
+        let selectedStock = null;
+        let pendingTrade = null;
+
+        // Mock stock data with realistic prices
+        const mockStocks = {
+            'AAPL': { ticker: 'AAPL', companyName: 'Apple Inc.', currentPrice: 185.50 },
+            'GOOGL': { ticker: 'GOOGL', companyName: 'Alphabet Inc.', currentPrice: 138.20 },
+            'MSFT': { ticker: 'MSFT', companyName: 'Microsoft Corporation', currentPrice: 378.85 },
+            'TSLA': { ticker: 'TSLA', companyName: 'Tesla Inc.', currentPrice: 248.42 },
+            'AMZN': { ticker: 'AMZN', companyName: 'Amazon.com Inc.', currentPrice: 145.86 },
+            'NVDA': { ticker: 'NVDA', companyName: 'NVIDIA Corporation', currentPrice: 875.30 },
+            'META': { ticker: 'META', companyName: 'Meta Platforms, Inc.', currentPrice: 480.00 },
+            'NFLX': { ticker: 'NFLX', companyName: 'Netflix, Inc.', currentPrice: 600.00 }
+        };
+
+        // Utility functions
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(amount);
+        }
+
+        function generateId() {
+            return Date.now().toString() + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Storage functions
+        function saveUserData() {
+            if (currentUser) {
+                localStorage.setItem('hypetrade_user_' + currentUser.email, JSON.stringify({
+                    cashBalance: cashBalance,
+                    positions: positions,
+                    trades: trades
+                }));
+            }
+        }
+
+        function loadUserData(email) {
+            const userData = localStorage.getItem('hypetrade_user_' + email);
+            if (userData) {
+                const data = JSON.parse(userData);
+                cashBalance = data.cashBalance || 100000;
+                positions = data.positions || [];
+                trades = data.trades || [];
+                return true;
+            }
+            return false;
+        }
+
+        // Authentication functions
+        function validateEmail(email) {
+            return /\S+@\S+\.\S+/.test(email);
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Clear previous errors
+            document.getElementById('loginEmailError').classList.add('hidden');
+            document.getElementById('loginPasswordError').classList.add('hidden');
+            document.getElementById('loginError').classList.add('hidden');
+
+            let hasErrors = false;
+
+            if (!email) {
+                document.getElementById('loginEmailError').textContent = 'Email is required';
+                document.getElementById('loginEmailError').classList.remove('hidden');
+                hasErrors = true;
+            } else if (!validateEmail(email)) {
+                document.getElementById('loginEmailError').textContent = 'Please enter a valid email';
+                document.getElementById('loginEmailError').classList.remove('hidden');
+                hasErrors = true;
+            }
+
+            if (!password) {
+                document.getElementById('loginPasswordError').textContent = 'Password is required';
+                document.getElementById('loginPasswordError').classList.remove('hidden');
+                hasErrors = true;
+            } else if (password.length < 8) {
+                document.getElementById('loginPasswordError').textContent = 'Password must be at least 8 characters';
+                document.getElementById('loginPasswordError').classList.remove('hidden');
+                hasErrors = true;
+            }
+
+            if (hasErrors) return;
+
+            // Check stored credentials
+            const storedUser = localStorage.getItem('hypetrade_auth_' + email);
+            if (storedUser && JSON.parse(storedUser).password === password) {
+                currentUser = { email: email };
+                loadUserData(email);
+                showMainApp();
+            } else {
+                document.getElementById('loginError').classList.remove('hidden');
+            }
+        }
+
+        function handleSignup(e) {
+            e.preventDefault();
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+
+            // Clear previous errors
+            document.getElementById('signupEmailError').classList.add('hidden');
+            document.getElementById('signupPasswordError').classList.add('hidden');
+
+            let hasErrors = false;
+
+            if (!email || !validateEmail(email)) {
+                document.getElementById('signupEmailError').classList.remove('hidden');
+                hasErrors = true;
+            }
+
+            if (!password || password.length < 8) {
+                document.getElementById('signupPasswordError').classList.remove('hidden');
+                hasErrors = true;
+            }
+
+            if (hasErrors) return;
+
+            // Store credentials
+            localStorage.setItem('hypetrade_auth_' + email, JSON.stringify({ password: password }));
+            
+            currentUser = { email: email };
+            cashBalance = 100000;
+            positions = [];
+            trades = [];
+            saveUserData();
+            showMainApp();
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            cashBalance = 100000;
+            positions = [];
+            trades = [];
+            showAuthPage();
+        }
+
+        // View functions
+        function showAuthPage() {
+            document.getElementById('authPage').classList.remove('hidden');
+            document.getElementById('mainApp').classList.add('hidden');
+        }
+
+        function showMainApp() {
+            document.getElementById('authPage').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            updateDashboard();
+        }
+
+        function toggleAuthForm() {
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            const toggleText = document.getElementById('authToggleText');
+            const toggleBtn = document.getElementById('authToggleBtn');
+
+            if (currentView === 'login') {
+                currentView = 'signup';
+                loginForm.classList.add('hidden');
+                signupForm.classList.remove('hidden');
+                toggleText.textContent = 'Already have an account?';
+                toggleBtn.textContent = 'Log in here';
+            } else {
+                currentView = 'login';
+                signupForm.classList.add('hidden');
+                loginForm.classList.remove('hidden');
+                toggleText.textContent = "Don't have an account?";
+                toggleBtn.textContent = 'Sign up here';
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById('dashboardView').classList.remove('hidden');
+            document.getElementById('historyView').classList.add('hidden');
+            document.getElementById('dashboardTab').classList.add('bg-blue-100', 'text-blue-700');
+            document.getElementById('dashboardTab').classList.remove('text-gray-600');
+            document.getElementById('historyTab').classList.remove('bg-blue-100', 'text-blue-700');
+            document.getElementById('historyTab').classList.add('text-gray-600');
+            updateDashboard();
+        }
+
+        function showHistory() {
+            document.getElementById('dashboardView').classList.add('hidden');
+            document.getElementById('historyView').classList.remove('hidden');
+            document.getElementById('historyTab').classList.add('bg-blue-100', 'text-blue-700');
+            document.getElementById('historyTab').classList.remove('text-gray-600');
+            document.getElementById('dashboardTab').classList.remove('bg-blue-100', 'text-blue-700');
+            document.getElementById('dashboardTab').classList.add('text-gray-600');
+            updateHistoryView();
+        }
+
+        // Dashboard functions
+        function calculatePortfolioValue() {
+            const holdingsValue = positions.reduce((total, position) => {
+                if (position.quantity > 0) {
+                    const currentPrice = mockStocks[position.ticker]?.currentPrice || 0;
+                    return total + (currentPrice * position.quantity);
+                }
+                return total;
+            }, 0);
+            return cashBalance + holdingsValue;
+        }
+
+        function calculateTotalPnL() {
+            return positions.reduce((total, position) => {
+                if (position.quantity > 0) {
+                    const currentPrice = mockStocks[position.ticker]?.currentPrice || 0;
+                    const pnl = (currentPrice - position.purchasePrice) * position.quantity;
+                    return total + pnl;
+                }
+                return total;
+            }, 0);
+        }
+
+        function updateDashboard() {
+            // Update overview cards
+            document.getElementById('cashBalance').textContent = formatCurrency(cashBalance);
+            document.getElementById('portfolioValue').textContent = formatCurrency(calculatePortfolioValue());
+            
+            const totalPnL = calculateTotalPnL();
+            const pnlElement = document.getElementById('totalPnL');
+            const pnlIcon = document.getElementById('pnlIcon');
+            const pnlTitle = document.getElementById('pnlTitle');
+            
+            if (totalPnL >= 0) {
+                pnlElement.className = 'text-lg sm:text-xl font-normal text-green-600';
+                pnlIcon.className = 'h-5 w-5 text-green-600';
+                pnlTitle.textContent = 'Total Gain';
+            } else {
+                pnlElement.className = 'text-lg sm:text-xl font-normal text-red-600';
+                pnlIcon.className = 'h-5 w-5 text-red-600';
+                pnlTitle.textContent = 'Total Loss';
+                // Update icon for down trend
+                pnlIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path>';
+            }
+            
+            pnlElement.textContent = formatCurrency(Math.abs(totalPnL));
+
+            // Update positions table
+            updatePositionsTable();
+            
+            // Update allocation chart legend
+            updateAllocationChart();
+        }
+
+        function updatePositionsTable() {
+            const container = document.getElementById('positionsContainer');
+            
+            // Group positions by ticker and calculate net quantities
+            const positionMap = {};
+            positions.forEach(pos => {
+                if (!positionMap[pos.ticker]) {
+                    positionMap[pos.ticker] = {
+                        totalQuantity: 0,
+                        totalCost: 0,
+                        positions: []
+                    };
+                }
+                positionMap[pos.ticker].totalQuantity += pos.quantity;
+                if (pos.quantity > 0) {
+                    positionMap[pos.ticker].totalCost += pos.quantity * pos.purchasePrice;
+                }
+                positionMap[pos.ticker].positions.push(pos);
+            });
+
+            // Filter to only show tickers with positive net quantities
+            const activePositions = Object.entries(positionMap).filter(([ticker, data]) => data.totalQuantity > 0);
+            
+            if (activePositions.length === 0) {
+                container.innerHTML = '<div class="text-center py-8 text-gray-500"><p>No positions yet. Start trading to build your portfolio!</p></div>';
+                return;
+            }
+
+            let tableHTML = `
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-gray-100">
+                                <th class="text-left py-3 px-4">Ticker</th>
+                                <th class="text-left py-3 px-4">Company</th>
+                                <th class="text-left py-3 px-4">Shares</th>
+                                <th class="text-left py-3 px-4">Avg Price</th>
+                                <th class="text-left py-3 px-4">Current Price</th>
+                                <th class="text-left py-3 px-4">Gain/Loss</th>
+                                <th class="text-left py-3 px-4">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            activePositions.forEach(([ticker, data]) => {
+                const avgPrice = data.totalCost / data.totalQuantity;
+                const stock = mockStocks[ticker];
+                const currentPrice = stock?.currentPrice || 0;
+                const pnl = (currentPrice - avgPrice) * data.totalQuantity;
+                
+                tableHTML += `
+                    <tr class="border-b border-gray-100 hover:bg-gray-50">
+                        <td class="py-3 px-4 text-blue-900">${ticker}</td>
+                        <td class="py-3 px-4 text-gray-600">${stock?.companyName || 'Unknown'}</td>
+                        <td class="py-3 px-4">${data.totalQuantity}</td>
+                        <td class="py-3 px-4">${formatCurrency(avgPrice)}</td>
+                        <td class="py-3 px-4">${formatCurrency(currentPrice)}</td>
+                        <td class="py-3 px-4 ${pnl >= 0 ? 'text-green-600' : 'text-red-600'}">${formatCurrency(pnl)}</td>
+                        <td class="py-3 px-4">
+                            <button onclick="openSellModal('${ticker}', ${data.totalQuantity})" class="btn btn-red btn-sm mr-2">Sell</button>
+                            <button onclick="viewTradeHistory('${ticker}')" class="btn btn-outline btn-sm">
+                                <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253z"></path>
+                                </svg>
+                                Journal
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += '</tbody></table></div>';
+            container.innerHTML = tableHTML;
+        }
+
+        function updateAllocationChart() {
+            const totalValue = calculatePortfolioValue();
+            const holdingsValue = totalValue - cashBalance;
+            
+            const legend = document.getElementById('allocationLegend');
+            
+            if (holdingsValue === 0) {
+                legend.innerHTML = `
+                    <div class="flex items-center space-x-1">
+                        <span class="w-3 h-3 rounded-full" style="background-color: #3b82f6;"></span>
+                        <span class="text-gray-600">Cash 100%</span>
+                    </div>
+                `;
+                return;
+            }
+
+            // Calculate percentages for each active position
+            const positionMap = {};
+            positions.forEach(pos => {
+                if (pos.quantity > 0) {
+                    const currentPrice = mockStocks[pos.ticker]?.currentPrice || 0;
+                    const value = currentPrice * pos.quantity;
+                    positionMap[pos.ticker] = (positionMap[pos.ticker] || 0) + value;
+                }
+            });
+
+            const cashPercent = Math.round((cashBalance / totalValue) * 100);
+            let legendHTML = `
+                <div class="flex items-center space-x-1">
+                    <span class="w-3 h-3 rounded-full" style="background-color: #3b82f6;"></span>
+                    <span class="text-gray-600">Cash ${cashPercent}%</span>
+                </div>
+            `;
+
+            const colors = ['#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#06b6d4'];
+            let colorIndex = 0;
+
+            Object.entries(positionMap).forEach(([ticker, value]) => {
+                const percent = Math.round((value / totalValue) * 100);
+                if (percent > 0) {
+                    const color = colors[colorIndex % colors.length];
+                    legendHTML += `
+                        <div class="flex items-center space-x-1">
+                            <span class="w-3 h-3 rounded-full" style="background-color: ${color};"></span>
+                            <span class="text-gray-600">${ticker} ${percent}%</span>
+                        </div>
+                    `;
+                    colorIndex++;
+                }
+            });
+
+            legend.innerHTML = legendHTML;
+        }
+
+        function updateHistoryView() {
+            const container = document.getElementById('historyContainer');
+            
+            if (trades.length === 0) {
+                container.innerHTML = '<div class="text-center py-8 text-gray-500"><p>No trades yet. Execute your first trade to see history!</p></div>';
+                return;
+            }
+
+            let tableHTML = `
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-gray-100">
+                                <th class="text-left py-3 px-4">Date</th>
+                                <th class="text-left py-3 px-4">Action</th>
+                                <th class="text-left py-3 px-4">Ticker</th>
+                                <th class="text-left py-3 px-4">Quantity</th>
+                                <th class="text-left py-3 px-4">Price</th>
+                                <th class="text-left py-3 px-4">Total</th>
+                                <th class="text-left py-3 px-4">Journal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            trades.forEach(trade => {
+                const date = new Date(trade.date).toLocaleDateString();
+                const total = trade.price * trade.quantity;
+                const badgeClass = trade.action === 'buy' ? 'badge-green' : 'badge-red';
+                
+                tableHTML += `
+                    <tr class="border-b border-gray-100 hover:bg-gray-50">
+                        <td class="py-3 px-4 text-sm">${date}</td>
+                        <td class="py-3 px-4">
+                            <span class="badge ${badgeClass}">${trade.action.toUpperCase()}</span>
+                        </td>
+                        <td class="py-3 px-4 text-blue-900">${trade.ticker}</td>
+                        <td class="py-3 px-4">${trade.quantity}</td>
+                        <td class="py-3 px-4">${formatCurrency(trade.price)}</td>
+                        <td class="py-3 px-4">${formatCurrency(total)}</td>
+                        <td class="py-3 px-4">
+                            ${trade.journalEntry ? 
+                                `<button onclick="viewJournalEntry('${trade.id}')" class="btn btn-outline btn-sm">View</button>` :
+                                '<span class="text-gray-400">No entry</span>'
+                            }
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += '</tbody></table></div>';
+            container.innerHTML = tableHTML;
+        }
+
+        // Trading functions
+        function openTradeModal() {
+            document.getElementById('tradeModal').classList.remove('hidden');
+            resetTradeModal();
+        }
+
+        function closeTradeModal() {
+            document.getElementById('tradeModal').classList.add('hidden');
+            resetTradeModal();
+        }
+
+        function resetTradeModal() {
+            document.getElementById('stockSearch').value = '';
+            document.getElementById('tradeQuantity').value = '';
+            document.getElementById('selectedStockInfo').classList.add('hidden');
+            document.getElementById('orderSummary').classList.add('hidden');
+            document.getElementById('tradeError').classList.add('hidden');
+            document.getElementById('executeTrade').disabled = true;
+            selectedStock = null;
+        }
+
+        function searchStock() {
+            const query = document.getElementById('stockSearch').value.toUpperCase();
+            const errorDiv = document.getElementById('tradeError');
+            
+            if (!query) {
+                showTradeError('Please enter a stock ticker');
+                return;
+            }
+
+            const stock = mockStocks[query];
+            if (stock) {
+                selectedStock = stock;
+                showSelectedStock(stock);
+                errorDiv.classList.add('hidden');
+                updateOrderSummary();
+            } else {
+                showTradeError('Stock not found. Try: AAPL, GOOGL, MSFT, TSLA, AMZN, NVDA, META, NFLX');
+                selectedStock = null;
+                document.getElementById('selectedStockInfo').classList.add('hidden');
+                document.getElementById('orderSummary').classList.add('hidden');
+            }
+        }
+
+        function showSelectedStock(stock) {
+            document.getElementById('selectedTicker').textContent = stock.ticker;
+            document.getElementById('selectedCompany').textContent = stock.companyName;
+            document.getElementById('selectedPrice').textContent = formatCurrency(stock.currentPrice);
+            
+            // Calculate owned shares (net positive quantity)
+            const ownedShares = positions
+                .filter(p => p.ticker === stock.ticker)
+                .reduce((sum, p) => sum + p.quantity, 0);
+            document.getElementById('ownedShares').textContent = Math.max(0, ownedShares);
+            
+            document.getElementById('selectedStockInfo').classList.remove('hidden');
+        }
+
+        function updateOrderSummary() {
+            const quantity = parseInt(document.getElementById('tradeQuantity').value);
+            
+            if (selectedStock && quantity > 0) {
+                const total = selectedStock.currentPrice * quantity;
+                
+                document.getElementById('orderSummaryText').textContent = `BUY ${quantity} shares of ${selectedStock.ticker}`;
+                document.getElementById('pricePerShare').textContent = formatCurrency(selectedStock.currentPrice);
+                document.getElementById('orderTotal').textContent = formatCurrency(total);
+                
+                document.getElementById('orderSummary').classList.remove('hidden');
+                document.getElementById('executeTrade').disabled = false;
+            } else {
+                document.getElementById('orderSummary').classList.add('hidden');
+                document.getElementById('executeTrade').disabled = true;
+            }
+        }
+
+        function showTradeError(message) {
+            const errorDiv = document.getElementById('tradeError');
+            errorDiv.querySelector('p').textContent = message;
+            errorDiv.classList.remove('hidden');
+        }
+
+        function executeTrade() {
+            if (!selectedStock) {
+                showTradeError('Please select a stock first');
+                return;
+            }
+
+            const quantity = parseInt(document.getElementById('tradeQuantity').value);
+            if (!quantity || quantity <= 0) {
+                showTradeError('Please enter a valid quantity');
+                return;
+            }
+
+            const totalCost = selectedStock.currentPrice * quantity;
+            if (totalCost > cashBalance) {
+                showTradeError('Insufficient cash balance');
+                return;
+            }
+
+            // Update cash balance
+            cashBalance -= totalCost;
+
+            // Create new position
+            const newPosition = {
+                id: generateId(),
+                ticker: selectedStock.ticker,
+                quantity: quantity,
+                purchasePrice: selectedStock.currentPrice,
+                purchaseDate: new Date().toISOString()
+            };
+            positions.push(newPosition);
+
+            // Prepare pending trade for journal
+            pendingTrade = {
+                id: generateId(),
+                ticker: selectedStock.ticker,
+                action: 'buy',
+                quantity: quantity,
+                price: selectedStock.currentPrice,
+                date: new Date().toISOString(),
+                positionId: newPosition.id
+            };
+
+            closeTradeModal();
+            openJournalModal();
+        }
+
+        // Journal functions
+        function openJournalModal() {
+            if (!pendingTrade) return;
+            
+            document.getElementById('journalModal').classList.remove('hidden');
+            
+            // Populate trade summary
+            document.getElementById('journalAction').textContent = pendingTrade.action;
+            document.getElementById('journalTicker').textContent = pendingTrade.ticker;
+            document.getElementById('journalQuantity').textContent = `${pendingTrade.quantity} shares`;
+            document.getElementById('journalPrice').textContent = formatCurrency(pendingTrade.price);
+            
+            // Reset form
+            document.querySelectorAll('#journalModal input[type="checkbox"]').forEach(cb => cb.checked = false);
+            document.getElementById('tradeRationale').value = '';
+            updateJournalSaveButton();
+        }
+
+        function closeJournalModal() {
+            document.getElementById('journalModal').classList.add('hidden');
+            pendingTrade = null;
+        }
+
+        function updateJournalSaveButton() {
+            const checkboxes = document.querySelectorAll('#journalModal input[type="checkbox"]:checked');
+            const rationale = document.getElementById('tradeRationale').value.trim();
+            const saveBtn = document.getElementById('saveJournal');
+            
+            saveBtn.disabled = checkboxes.length === 0 && !rationale;
+        }
+
+        function saveJournalEntry() {
+            if (!pendingTrade) return;
+            
+            const selectedSources = Array.from(document.querySelectorAll('#journalModal input[type="checkbox"]:checked'))
+                .map(cb => cb.value);
+            const rationale = document.getElementById('tradeRationale').value.trim();
+            
+            // Add journal entry to trade
+            pendingTrade.journalEntry = {
+                sources: selectedSources,
+                rationale: rationale
+            };
+            
+            // Add trade to history (newest first)
+            trades.unshift(pendingTrade);
+            
+            // Save data
+            saveUserData();
+            
+            closeJournalModal();
+            updateDashboard();
+        }
+
+        // Sell functions
+        function openSellModal(ticker, maxQuantity) {
+            const quantity = prompt(`How many shares of ${ticker} would you like to sell? (Available: ${maxQuantity})`);
+            
+            if (quantity === null) return;
+            
+            const qty = parseInt(quantity);
+            if (!qty || qty <= 0 || qty > maxQuantity) {
+                alert('Please enter a valid quantity');
+                return;
+            }
+            
+            executeSell(ticker, qty);
+        }
+
+        function executeSell(ticker, quantity) {
+            const stock = mockStocks[ticker];
+            if (!stock) return;
+            
+            const proceeds = stock.currentPrice * quantity;
+            cashBalance += proceeds;
+            
+            // Add sell position (negative quantity to offset buys)
+            const sellPosition = {
+                id: generateId(),
+                ticker: ticker,
+                quantity: -quantity,
+                purchasePrice: stock.currentPrice,
+                purchaseDate: new Date().toISOString()
+            };
+            positions.push(sellPosition);
+            
+            // Create sell trade
+            pendingTrade = {
+                id: generateId(),
+                ticker: ticker,
+                action: 'sell',
+                quantity: quantity,
+                price: stock.currentPrice,
+                date: new Date().toISOString(),
+                positionId: sellPosition.id
+            };
+            
+            openJournalModal();
+        }
+
+        // Reset function
+        function resetAccount() {
+            cashBalance = 100000;
+            positions = [];
+            trades = [];
+            saveUserData();
+            updateDashboard();
+            document.getElementById('resetModal').classList.add('hidden');
+        }
+
+        // View functions
+        function viewTradeHistory(ticker) {
+            const tickerTrades = trades.filter(t => t.ticker === ticker);
+            if (tickerTrades.length === 0) {
+                alert('No trade history found for ' + ticker);
+                return;
+            }
+            
+            showHistory();
+        }
+
+        function viewJournalEntry(tradeId) {
+            const trade = trades.find(t => t.id === tradeId);
+            if (!trade || !trade.journalEntry) return;
+            
+            const entry = trade.journalEntry;
+            const sources = entry.sources.join(', ') || 'None';
+            const rationale = entry.rationale || 'No rationale provided';
+            
+            alert(`Trade: ${trade.action.toUpperCase()} ${trade.quantity} ${trade.ticker} @ ${formatCurrency(trade.price)}\n\nSources: ${sources}\n\nRationale: ${rationale}`);
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auth form listeners
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            document.getElementById('signupForm').addEventListener('submit', handleSignup);
+            document.getElementById('authToggleBtn').addEventListener('click', toggleAuthForm);
+            
+            // Main app listeners
+            document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+            document.getElementById('dashboardTab').addEventListener('click', showDashboard);
+            document.getElementById('historyTab').addEventListener('click', showHistory);
+            document.getElementById('newTradeBtn').addEventListener('click', openTradeModal);
+            document.getElementById('resetBtn').addEventListener('click', () => {
+                document.getElementById('resetModal').classList.remove('hidden');
+            });
+            
+            // Modal listeners
+            document.getElementById('closeTradeModal').addEventListener('click', closeTradeModal);
+            document.getElementById('cancelTrade').addEventListener('click', closeTradeModal);
+            document.getElementById('searchBtn').addEventListener('click', searchStock);
+            document.getElementById('executeTrade').addEventListener('click', executeTrade);
+            
+            document.getElementById('closeJournalModal').addEventListener('click', closeJournalModal);
+            document.getElementById('saveJournal').addEventListener('click', saveJournalEntry);
+            
+            document.getElementById('closeResetModal').addEventListener('click', () => {
+                document.getElementById('resetModal').classList.add('hidden');
+            });
+            document.getElementById('cancelReset').addEventListener('click', () => {
+                document.getElementById('resetModal').classList.add('hidden');
+            });
+            document.getElementById('confirmReset').addEventListener('click', resetAccount);
+            
+            // Input listeners
+            document.getElementById('stockSearch').addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    searchStock();
+                }
+            });
+            
+            document.getElementById('tradeQuantity').addEventListener('input', updateOrderSummary);
+            
+            // Journal form listeners
+            document.querySelectorAll('#journalModal input[type="checkbox"]').forEach(cb => {
+                cb.addEventListener('change', updateJournalSaveButton);
+            });
+            document.getElementById('tradeRationale').addEventListener('input', updateJournalSaveButton);
+            
+            // Close modals on outside click
+            document.getElementById('tradeModal').addEventListener('click', function(e) {
+                if (e.target === this) closeTradeModal();
+            });
+            document.getElementById('journalModal').addEventListener('click', function(e) {
+                if (e.target === this) closeJournalModal();
+            });
+            document.getElementById('resetModal').addEventListener('click', function(e) {
+                if (e.target === this) this.classList.add('hidden');
+            });
+        });
+
+        // Simulate price updates every minute
+        setInterval(() => {
+            Object.keys(mockStocks).forEach(ticker => {
+                const stock = mockStocks[ticker];
+                const change = (Math.random() - 0.5) * 2; // Random change between -1 and 1
+                stock.currentPrice = Math.max(0.01, stock.currentPrice + change);
+            });
+            
+            // Update dashboard if we're in the main app
+            if (!document.getElementById('mainApp').classList.contains('hidden')) {
+                updateDashboard();
+            }
+        }, 60000); // Update every minute
+    </script>
+</body>
+</html>
